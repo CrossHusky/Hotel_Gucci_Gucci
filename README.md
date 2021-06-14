@@ -4,7 +4,7 @@
 
 - [x]   #01: Pantalla de presentación con los datos de la universidad (logo uaa),   materia, profesor, fecha y datos de los programadores. Obligatorio uso de la clase Graphics en esta pantalla ( imagen(s) )
 
-- [ ]   #02: Después aparecer otra pantalla del sistema, con el nombre del hotel, lema, logotipo, imágenes, sonido, se espera una gran pantalla de presentación del sistema.  Con la opción de login y contraseña para ingresar al sistema, debes tener una cuenta por cada miembro del equipo. Las contraseñas deben estar encriptadas en la base de datos. Obligatorio uso de la clase Graphics ( imáge(s) )
+- [x]   #02: Después aparecer otra pantalla del sistema, con el nombre del hotel, lema, logotipo, imágenes, sonido, se espera una gran pantalla de presentación del sistema.  Con la opción de login y contraseña para ingresar al sistema, debes tener una cuenta por cada miembro del equipo. Las contraseñas deben estar encriptadas en la base de datos. Obligatorio uso de la clase Graphics ( imáge(s) )
 
 - [ ]   #03: Menu del Sistema con las opciones Registro, Salida y Consultas. En consultas mostrarme el submenu o el lugar donde acceso a las 10 consultas que pedi 
 
