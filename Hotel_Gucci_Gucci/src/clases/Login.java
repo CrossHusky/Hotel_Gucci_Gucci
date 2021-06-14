@@ -1,33 +1,42 @@
 
 package clases;
 
-
+import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import static java.awt.Font.PLAIN;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import org.apache.commons.codec.digest.DigestUtils;
 
 public class Login extends javax.swing.JFrame {
 
     Imagen imagen = new Imagen();
     Informacion Inf;
+    MySqlConn objConn = new MySqlConn();
     Clip sonido;
     
     public Login() {
         this.setContentPane(imagen);
         initComponents();
         Configuracion();
+        Inf = new Informacion();
+        Inf.setVisible(true);
         this.jLabelImgUser.requestFocus();
     }
     
@@ -38,7 +47,7 @@ public class Login extends javax.swing.JFrame {
         setLocation(getLocation().x+230, getLocation().y);
         try {// **************************** Cargamos los sonidos o musica *********************************
             sonido = AudioSystem.getClip();
-            sonido.open(AudioSystem.getAudioInputStream(new File("src/audio/Musica.wav")));
+            sonido.open(AudioSystem.getAudioInputStream(new File("src\\audio\\Musica.wav")));
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
             JOptionPane.showMessageDialog(this, "Error no se pudo abrir el archivo");
         }
@@ -82,6 +91,22 @@ public class Login extends javax.swing.JFrame {
         jTextFieldUsuario.setFont(new java.awt.Font("Nirmala UI", 0, 18)); // NOI18N
         jTextFieldUsuario.setForeground(new java.awt.Color(255, 255, 255));
         jTextFieldUsuario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jTextFieldUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldUsuarioFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldUsuarioFocusLost(evt);
+            }
+        });
+        jTextFieldUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextFieldUsuarioMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jTextFieldUsuarioMouseEntered(evt);
+            }
+        });
         jPanelLogin.add(jTextFieldUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, 170, -1));
         jPanelLogin.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, 200, 10));
 
@@ -95,6 +120,27 @@ public class Login extends javax.swing.JFrame {
         jPasswordFieldPassword.setFont(new java.awt.Font("Nirmala UI", 0, 18)); // NOI18N
         jPasswordFieldPassword.setForeground(new java.awt.Color(255, 255, 255));
         jPasswordFieldPassword.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPasswordFieldPassword.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jPasswordFieldPasswordFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jPasswordFieldPasswordFocusLost(evt);
+            }
+        });
+        jPasswordFieldPassword.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPasswordFieldPasswordMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPasswordFieldPasswordMouseEntered(evt);
+            }
+        });
+        jPasswordFieldPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPasswordFieldPasswordKeyPressed(evt);
+            }
+        });
         jPanelLogin.add(jPasswordFieldPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 170, 24));
         jPanelLogin.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 200, 10));
 
@@ -103,6 +149,11 @@ public class Login extends javax.swing.JFrame {
         jButtonEntrar.setForeground(new java.awt.Color(255, 255, 255));
         jButtonEntrar.setText("Entrar");
         jButtonEntrar.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)), "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Nirmala UI", 1, 14), new java.awt.Color(24, 38, 76))); // NOI18N
+        jButtonEntrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEntrarActionPerformed(evt);
+            }
+        });
         jPanelLogin.add(jButtonEntrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 290, 32));
 
         jLabelImgUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/login/User.png"))); // NOI18N
@@ -135,6 +186,53 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextFieldUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldUsuarioMouseClicked
+        this.jLabelUsuario.setVisible(false);
+    }//GEN-LAST:event_jTextFieldUsuarioMouseClicked
+
+    private void jTextFieldUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldUsuarioFocusLost
+        if (this.jTextFieldUsuario.getText().trim().equals("")) {
+            this.jLabelUsuario.setVisible(true);
+        }
+    }//GEN-LAST:event_jTextFieldUsuarioFocusLost
+
+    private void jTextFieldUsuarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldUsuarioFocusGained
+        this.jLabelUsuario.setVisible(false);
+    }//GEN-LAST:event_jTextFieldUsuarioFocusGained
+
+    private void jPasswordFieldPasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPasswordFieldPasswordMouseClicked
+        this.jLabelPassword.setVisible(false);
+    }//GEN-LAST:event_jPasswordFieldPasswordMouseClicked
+
+    private void jPasswordFieldPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPasswordFieldPasswordFocusLost
+        String pass = new String(this.jPasswordFieldPassword.getPassword());
+        if (pass.equals("")){
+            this.jLabelPassword.setVisible(true);
+        }
+    }//GEN-LAST:event_jPasswordFieldPasswordFocusLost
+
+    private void jPasswordFieldPasswordMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPasswordFieldPasswordMouseEntered
+        
+    }//GEN-LAST:event_jPasswordFieldPasswordMouseEntered
+
+    private void jTextFieldUsuarioMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldUsuarioMouseEntered
+        
+    }//GEN-LAST:event_jTextFieldUsuarioMouseEntered
+
+    private void jPasswordFieldPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPasswordFieldPasswordFocusGained
+        this.jLabelPassword.setVisible(false);
+    }//GEN-LAST:event_jPasswordFieldPasswordFocusGained
+
+    private void jButtonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEntrarActionPerformed
+        Comprobar();
+    }//GEN-LAST:event_jButtonEntrarActionPerformed
+
+    private void jPasswordFieldPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordFieldPasswordKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            Comprobar();
+        }
+    }//GEN-LAST:event_jPasswordFieldPasswordKeyPressed
 
     /**
      * @param args the command line arguments
@@ -209,6 +307,29 @@ public class Login extends javax.swing.JFrame {
                 
                 setOpaque(false);
                 super.paint(grafico);
+        }
+    }
+        
+    private void Comprobar(){
+        String cuenta, contraseña,query;
+        cuenta = this.jTextFieldUsuario.getText().trim();
+        query = "select * from cuentas where cuenta = "+"'"+cuenta+"'";
+        this.objConn.Consult(query);
+        try{
+            String contraseñaMYSql = this.objConn.rs.getString(2);
+            char[] passw = this.jPasswordFieldPassword.getPassword();
+            contraseña = new String(passw);
+            String contraseñaencriptada = DigestUtils.md5Hex(contraseña);
+            if (contraseñaMYSql.equals(contraseñaencriptada)) {
+                    new Sistema(this.jTextFieldUsuario.getText(),objConn).setVisible(true);
+                    sonido.stop();
+                    Inf.setVisible(false);
+                    this.setVisible(false);
+            }
+            else JOptionPane.showMessageDialog(this, "Error en la contraseña");
+        }catch (SQLException ex){
+            JOptionPane.showMessageDialog(this, "No existe la cuenta.");
+            System.out.println("No existe la cuenta.");
         }
     }
 }
