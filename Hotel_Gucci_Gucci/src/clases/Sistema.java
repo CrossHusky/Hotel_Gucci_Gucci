@@ -4,18 +4,26 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Enumeration;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class Sistema extends javax.swing.JFrame {
 
-    private int aux;
+    private int aux, numero, Cargo, CargoEx, Ganancias;
     Clip sonido;
     Clip sonido2;
     MySqlConn conn;
+    Huesped persona;
+    Font font;
 
     public Sistema() {
         initComponents();
@@ -34,12 +42,25 @@ public class Sistema extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/imagenes/login/Icono.png")));// Cambiar icono de ventana.
         try {// **************************** Cargamos los sonidos o musica *********************************
             sonido = AudioSystem.getClip();
-            sonido.open(AudioSystem.getAudioInputStream(new File("src/audio/sonido2.wav")));
+            sonido.open(AudioSystem.getAudioInputStream(new File("src\\audio\\sonido2.wav")));
             sonido2 = AudioSystem.getClip();
-            sonido2.open(AudioSystem.getAudioInputStream(new File("src/audio/sonido1.wav")));
+            sonido2.open(AudioSystem.getAudioInputStream(new File("src\\audio\\sonido1.wav")));
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
             JOptionPane.showMessageDialog(this, "Error no se pudo abrir el archivo");
         }
+        this.jPanelRegistro.setVisible(false);// Ocualtamos los paneles no usados aun.
+        //***************************************** Configuracion de los JSpinners para el rango *******************
+        SpinnerNumberModel modeloSpinner = new SpinnerNumberModel();
+        modeloSpinner.setMinimum(0);
+        modeloSpinner.setMaximum(1);
+        this.jSpinnerTotalPersonas.setModel(modeloSpinner);
+        SpinnerNumberModel modeloSpinner2 = new SpinnerNumberModel();
+        modeloSpinner2.setMinimum(0);
+        this.jSpinnerDiasA.setModel(modeloSpinner2);
+        JFormattedTextField Desabilitar = ((JSpinner.DefaultEditor) this.jSpinnerDiasA.getEditor()).getTextField();
+        Desabilitar.setEditable(false);
+        JFormattedTextField Desabilitar2 = ((JSpinner.DefaultEditor) this.jSpinnerTotalPersonas.getEditor()).getTextField();
+        Desabilitar2.setEditable(false);
     }
 
     /**
@@ -65,6 +86,60 @@ public class Sistema extends javax.swing.JFrame {
         jLabelGanancias = new javax.swing.JLabel();
         jPanelHome = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanelRegistro = new javax.swing.JPanel();
+        jLabelNombre = new javax.swing.JLabel();
+        jTextFieldNombre = new javax.swing.JTextField();
+        jLabelTipo = new javax.swing.JLabel();
+        jComboBoxTipo = new javax.swing.JComboBox<>();
+        jLabelCiudad = new javax.swing.JLabel();
+        jTextFieldCiudad = new javax.swing.JTextField();
+        jLabelTotalPersonas = new javax.swing.JLabel();
+        jSpinnerTotalPersonas = new javax.swing.JSpinner();
+        jLabelDiasA = new javax.swing.JLabel();
+        jSpinnerDiasA = new javax.swing.JSpinner();
+        jLabelFecha = new javax.swing.JLabel();
+        jDateChooserFecha = new com.toedter.calendar.JDateChooser();
+        jLabelTotalPersonaExtras = new javax.swing.JLabel();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        jRadioButton3 = new javax.swing.JRadioButton();
+        jRadioButton4 = new javax.swing.JRadioButton();
+        jRadioButton5 = new javax.swing.JRadioButton();
+        jRadioButton6 = new javax.swing.JRadioButton();
+        jRadioButton7 = new javax.swing.JRadioButton();
+        jRadioButton8 = new javax.swing.JRadioButton();
+        jRadioButton9 = new javax.swing.JRadioButton();
+        jRadioButton10 = new javax.swing.JRadioButton();
+        jRadioButton11 = new javax.swing.JRadioButton();
+        jRadioButton12 = new javax.swing.JRadioButton();
+        jRadioButton13 = new javax.swing.JRadioButton();
+        jRadioButton14 = new javax.swing.JRadioButton();
+        jRadioButton15 = new javax.swing.JRadioButton();
+        jRadioButton16 = new javax.swing.JRadioButton();
+        jRadioButton17 = new javax.swing.JRadioButton();
+        jRadioButton18 = new javax.swing.JRadioButton();
+        jRadioButton19 = new javax.swing.JRadioButton();
+        jRadioButton20 = new javax.swing.JRadioButton();
+        jRadioButton21 = new javax.swing.JRadioButton();
+        jRadioButton22 = new javax.swing.JRadioButton();
+        jRadioButton23 = new javax.swing.JRadioButton();
+        jRadioButton24 = new javax.swing.JRadioButton();
+        jRadioButton25 = new javax.swing.JRadioButton();
+        jRadioButton26 = new javax.swing.JRadioButton();
+        jRadioButton27 = new javax.swing.JRadioButton();
+        jRadioButton28 = new javax.swing.JRadioButton();
+        jRadioButton29 = new javax.swing.JRadioButton();
+        jRadioButton30 = new javax.swing.JRadioButton();
+        jLabelPlantillaS = new javax.swing.JLabel();
+        jLabelPlantillaD = new javax.swing.JLabel();
+        jLabelPlantillaT = new javax.swing.JLabel();
+        jLabelPlantilla = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jButtonRegistrar = new javax.swing.JButton();
+        jLabelTotalHL = new javax.swing.JLabel();
+        jLabelHabitacionesS = new javax.swing.JLabel();
+        jLabelHabitacionesD = new javax.swing.JLabel();
+        jLabelHabitacionesT = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hotel Gucci Gucci");
@@ -237,6 +312,391 @@ public class Sistema extends javax.swing.JFrame {
 
         getContentPane().add(jPanelHome, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 780, 530));
 
+        jPanelRegistro.setBackground(new java.awt.Color(62, 63, 99));
+        jPanelRegistro.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelNombre.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelNombre.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelNombre.setText("Nombre:");
+        jPanelRegistro.add(jLabelNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, -1, -1));
+        jPanelRegistro.add(jTextFieldNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 90, 140, -1));
+
+        jLabelTipo.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelTipo.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelTipo.setText("Tipo de Habitacion:");
+        jPanelRegistro.add(jLabelTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
+
+        jComboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Simple", "Doble", "Triple" }));
+        jComboBoxTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxTipoActionPerformed(evt);
+            }
+        });
+        jPanelRegistro.add(jComboBoxTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, 140, -1));
+
+        jLabelCiudad.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelCiudad.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelCiudad.setText("Ciudad Origen:");
+        jPanelRegistro.add(jLabelCiudad, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, -1, -1));
+        jPanelRegistro.add(jTextFieldCiudad, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 150, 140, -1));
+
+        jLabelTotalPersonas.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelTotalPersonas.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelTotalPersonas.setText("Total de Personas:");
+        jPanelRegistro.add(jLabelTotalPersonas, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
+
+        jSpinnerTotalPersonas.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jSpinnerTotalPersonas.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerTotalPersonasStateChanged(evt);
+            }
+        });
+        jPanelRegistro.add(jSpinnerTotalPersonas, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 140, -1));
+
+        jLabelDiasA.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelDiasA.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelDiasA.setText("Dias de Alojamiento:");
+        jPanelRegistro.add(jLabelDiasA, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 210, -1, -1));
+
+        jSpinnerDiasA.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPanelRegistro.add(jSpinnerDiasA, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 210, 140, -1));
+
+        jLabelFecha.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelFecha.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelFecha.setText("Fecha:");
+        jPanelRegistro.add(jLabelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 240, -1, 20));
+        jPanelRegistro.add(jDateChooserFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 240, 140, -1));
+
+        jLabelTotalPersonaExtras.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelTotalPersonaExtras.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelTotalPersonaExtras.setText("Cargo Extra");
+        jPanelRegistro.add(jLabelTotalPersonaExtras, new org.netbeans.lib.awtextra.AbsoluteConstraints(322, 180, -1, -1));
+
+        buttonGroupPlantilla.add(jRadioButton1);
+        jRadioButton1.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton1.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton1.setBorder(null);
+        jRadioButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton1.setOpaque(false);
+        jPanelRegistro.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(432, 481, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton2);
+        jRadioButton2.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton2.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton2.setBorder(null);
+        jRadioButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton2.setOpaque(false);
+        jPanelRegistro.add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(432, 444, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton3);
+        jRadioButton3.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton3.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton3.setBorder(null);
+        jRadioButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton3.setOpaque(false);
+        jPanelRegistro.add(jRadioButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(432, 408, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton4);
+        jRadioButton4.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton4.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton4.setBorder(null);
+        jRadioButton4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton4.setOpaque(false);
+        jPanelRegistro.add(jRadioButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(432, 370, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton5);
+        jRadioButton5.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton5.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton5.setBorder(null);
+        jRadioButton5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton5.setOpaque(false);
+        jPanelRegistro.add(jRadioButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(432, 314, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton6);
+        jRadioButton6.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton6.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton6.setBorder(null);
+        jRadioButton6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton6.setOpaque(false);
+        jPanelRegistro.add(jRadioButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(432, 238, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton7);
+        jRadioButton7.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton7.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton7.setBorder(null);
+        jRadioButton7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton7.setOpaque(false);
+        jPanelRegistro.add(jRadioButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(432, 143, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton8);
+        jRadioButton8.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton8.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton8.setBorder(null);
+        jRadioButton8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton8.setOpaque(false);
+        jPanelRegistro.add(jRadioButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 68, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton9);
+        jRadioButton9.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton9.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton9.setBorder(null);
+        jRadioButton9.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton9.setOpaque(false);
+        jPanelRegistro.add(jRadioButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 125, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton10);
+        jRadioButton10.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton10.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton10.setBorder(null);
+        jRadioButton10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton10.setOpaque(false);
+        jPanelRegistro.add(jRadioButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 202, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton11);
+        jRadioButton11.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton11.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton11.setBorder(null);
+        jRadioButton11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton11.setOpaque(false);
+        jPanelRegistro.add(jRadioButton11, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 275, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton12);
+        jRadioButton12.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton12.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton12.setBorder(null);
+        jRadioButton12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton12.setOpaque(false);
+        jPanelRegistro.add(jRadioButton12, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 334, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton13);
+        jRadioButton13.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton13.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton13.setBorder(null);
+        jRadioButton13.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton13.setOpaque(false);
+        jPanelRegistro.add(jRadioButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 370, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton14);
+        jRadioButton14.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton14.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton14.setBorder(null);
+        jRadioButton14.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton14.setOpaque(false);
+        jPanelRegistro.add(jRadioButton14, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 407, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton15);
+        jRadioButton15.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton15.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton15.setBorder(null);
+        jRadioButton15.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton15.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton15.setOpaque(false);
+        jPanelRegistro.add(jRadioButton15, new org.netbeans.lib.awtextra.AbsoluteConstraints(512, 444, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton16);
+        jRadioButton16.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton16.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton16.setBorder(null);
+        jRadioButton16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton16.setOpaque(false);
+        jPanelRegistro.add(jRadioButton16, new org.netbeans.lib.awtextra.AbsoluteConstraints(596, 485, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton17);
+        jRadioButton17.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton17.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton17.setBorder(null);
+        jRadioButton17.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton17.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton17.setOpaque(false);
+        jPanelRegistro.add(jRadioButton17, new org.netbeans.lib.awtextra.AbsoluteConstraints(596, 443, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton18);
+        jRadioButton18.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton18.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton18.setBorder(null);
+        jRadioButton18.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton18.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton18.setOpaque(false);
+        jPanelRegistro.add(jRadioButton18, new org.netbeans.lib.awtextra.AbsoluteConstraints(596, 388, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton19);
+        jRadioButton19.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton19.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton19.setBorder(null);
+        jRadioButton19.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton19.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton19.setOpaque(false);
+        jPanelRegistro.add(jRadioButton19, new org.netbeans.lib.awtextra.AbsoluteConstraints(596, 333, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton20);
+        jRadioButton20.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton20.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton20.setBorder(null);
+        jRadioButton20.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton20.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton20.setOpaque(false);
+        jPanelRegistro.add(jRadioButton20, new org.netbeans.lib.awtextra.AbsoluteConstraints(596, 275, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton21);
+        jRadioButton21.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton21.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton21.setBorder(null);
+        jRadioButton21.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton21.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton21.setOpaque(false);
+        jPanelRegistro.add(jRadioButton21, new org.netbeans.lib.awtextra.AbsoluteConstraints(596, 219, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton22);
+        jRadioButton22.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton22.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton22.setBorder(null);
+        jRadioButton22.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton22.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton22.setOpaque(false);
+        jPanelRegistro.add(jRadioButton22, new org.netbeans.lib.awtextra.AbsoluteConstraints(596, 153, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton23);
+        jRadioButton23.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton23.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton23.setBorder(null);
+        jRadioButton23.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton23.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton23.setOpaque(false);
+        jPanelRegistro.add(jRadioButton23, new org.netbeans.lib.awtextra.AbsoluteConstraints(596, 81, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton24);
+        jRadioButton24.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton24.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton24.setBorder(null);
+        jRadioButton24.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton24.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton24.setOpaque(false);
+        jPanelRegistro.add(jRadioButton24, new org.netbeans.lib.awtextra.AbsoluteConstraints(675, 82, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton25);
+        jRadioButton25.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton25.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton25.setBorder(null);
+        jRadioButton25.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton25.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton25.setOpaque(false);
+        jPanelRegistro.add(jRadioButton25, new org.netbeans.lib.awtextra.AbsoluteConstraints(675, 158, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton26);
+        jRadioButton26.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton26.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton26.setBorder(null);
+        jRadioButton26.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton26.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton26.setOpaque(false);
+        jPanelRegistro.add(jRadioButton26, new org.netbeans.lib.awtextra.AbsoluteConstraints(675, 234, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton27);
+        jRadioButton27.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton27.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton27.setBorder(null);
+        jRadioButton27.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton27.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton27.setOpaque(false);
+        jPanelRegistro.add(jRadioButton27, new org.netbeans.lib.awtextra.AbsoluteConstraints(675, 305, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton28);
+        jRadioButton28.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton28.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton28.setBorder(null);
+        jRadioButton28.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton28.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton28.setOpaque(false);
+        jPanelRegistro.add(jRadioButton28, new org.netbeans.lib.awtextra.AbsoluteConstraints(675, 361, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton29);
+        jRadioButton29.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton29.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton29.setBorder(null);
+        jRadioButton29.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton29.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton29.setOpaque(false);
+        jPanelRegistro.add(jRadioButton29, new org.netbeans.lib.awtextra.AbsoluteConstraints(675, 415, 60, 20));
+
+        buttonGroupPlantilla.add(jRadioButton30);
+        jRadioButton30.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jRadioButton30.setForeground(new java.awt.Color(255, 0, 0));
+        jRadioButton30.setBorder(null);
+        jRadioButton30.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jRadioButton30.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButton30.setOpaque(false);
+        jPanelRegistro.add(jRadioButton30, new org.netbeans.lib.awtextra.AbsoluteConstraints(675, 458, 60, 20));
+
+        jLabelPlantillaS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sistema/plantillaS.png"))); // NOI18N
+        jLabelPlantillaS.setOpaque(true);
+        jPanelRegistro.add(jLabelPlantillaS, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 10, 350, 510));
+
+        jLabelPlantillaD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sistema/plantillaD.png"))); // NOI18N
+        jLabelPlantillaD.setOpaque(true);
+        jPanelRegistro.add(jLabelPlantillaD, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 10, 350, 510));
+
+        jLabelPlantillaT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sistema/plantillaT.png"))); // NOI18N
+        jLabelPlantillaT.setOpaque(true);
+        jPanelRegistro.add(jLabelPlantillaT, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 10, 350, 510));
+
+        jLabelPlantilla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sistema/plantilla.png"))); // NOI18N
+        jLabelPlantilla.setOpaque(true);
+        jPanelRegistro.add(jLabelPlantilla, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 10, 350, 510));
+
+        jLabel3.setFont(new java.awt.Font("Nirmala UI", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Registro de Huesped");
+        jPanelRegistro.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, -1, -1));
+
+        jButtonRegistrar.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonRegistrar.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonRegistrar.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonRegistrar.setText("Registrar");
+        jButtonRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRegistrarActionPerformed(evt);
+            }
+        });
+        jPanelRegistro.add(jButtonRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 300, 40));
+
+        jLabelTotalHL.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelTotalHL.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelTotalHL.setText("Total de Habitaciones Libres: ");
+        jPanelRegistro.add(jLabelTotalHL, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, -1, -1));
+
+        jLabelHabitacionesS.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelHabitacionesS.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelHabitacionesS.setText("Habitaciones Simples:");
+        jPanelRegistro.add(jLabelHabitacionesS, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, -1, -1));
+
+        jLabelHabitacionesD.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelHabitacionesD.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelHabitacionesD.setText("Habitaciones Dobles: ");
+        jPanelRegistro.add(jLabelHabitacionesD, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, -1, -1));
+
+        jLabelHabitacionesT.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelHabitacionesT.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelHabitacionesT.setText("Habitaciones Triples: ");
+        jPanelRegistro.add(jLabelHabitacionesT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, -1, -1));
+
+        getContentPane().add(jPanelRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 780, 530));
+        jPanelRegistro.getAccessibleContext().setAccessibleName("");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -301,6 +761,8 @@ public class Sistema extends javax.swing.JFrame {
             sonido2.start();
             sonido2.setFramePosition(0);
             this.jPanelHome.setVisible(false);
+            this.jPanelRegistro.setVisible(true);
+            Limpiar();
             aux = 1;
     }//GEN-LAST:event_jLabelRegistroMouseClicked
 
@@ -312,6 +774,7 @@ public class Sistema extends javax.swing.JFrame {
         sonido2.start();
         sonido2.setFramePosition(0);
         this.jPanelHome.setVisible(false);
+        this.jPanelRegistro.setVisible(false);
     }//GEN-LAST:event_jLabelSalidaMouseClicked
 
     private void jLabelConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelConsultaMouseClicked
@@ -322,6 +785,7 @@ public class Sistema extends javax.swing.JFrame {
         sonido2.start();
         sonido2.setFramePosition(0);
         this.jPanelHome.setVisible(false);
+        this.jPanelRegistro.setVisible(false);
     }//GEN-LAST:event_jLabelConsultaMouseClicked
 
     private void jLabelLogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelLogoMouseClicked
@@ -330,6 +794,7 @@ public class Sistema extends javax.swing.JFrame {
         this.jLabelConsulta.setBackground(new java.awt.Color(20, 45, 87));
         this.jLabelRegistro.setBackground(new java.awt.Color(20, 45, 87));
         this.jPanelHome.setVisible(true);
+        this.jPanelRegistro.setVisible(false);
     }//GEN-LAST:event_jLabelLogoMouseClicked
 
     private void jLabelSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelSalirMouseClicked
@@ -337,12 +802,15 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabelSalirMouseClicked
 
     private void jLabelRegistroMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRegistroMouseReleased
+
             this.jLabelSalida.setBackground(new java.awt.Color(20, 45, 87));
             this.jLabelConsulta.setBackground(new java.awt.Color(20, 45, 87));
             this.jLabelRegistro.setBackground(new java.awt.Color(74, 98, 175));
             sonido2.start();
             sonido2.setFramePosition(0);
             this.jPanelHome.setVisible(false);
+            this.jPanelRegistro.setVisible(true);
+            Limpiar();
             aux = 1;
     }//GEN-LAST:event_jLabelRegistroMouseReleased
 
@@ -353,6 +821,7 @@ public class Sistema extends javax.swing.JFrame {
         this.jLabelSalida.setBackground(new java.awt.Color(74, 98, 175));
         sonido2.stop();
         this.jPanelHome.setVisible(false);
+        this.jPanelRegistro.setVisible(false);
     }//GEN-LAST:event_jLabelSalidaMouseReleased
 
     private void jLabelConsultaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelConsultaMouseReleased
@@ -362,7 +831,77 @@ public class Sistema extends javax.swing.JFrame {
         this.jLabelConsulta.setBackground(new java.awt.Color(74, 98, 175));
         sonido2.stop();
         this.jPanelHome.setVisible(false);
+        this.jPanelRegistro.setVisible(false);
     }//GEN-LAST:event_jLabelConsultaMouseReleased
+
+    private void jComboBoxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoActionPerformed
+        Ocultar(this.jComboBoxTipo.getSelectedIndex());
+        this.jLabelTotalPersonaExtras.setVisible(false);
+    }//GEN-LAST:event_jComboBoxTipoActionPerformed
+
+    private void jButtonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarActionPerformed
+
+            String caracter = "" + this.jComboBoxTipo.getSelectedItem();
+            if (this.jTextFieldNombre.getText() != ""
+                    && this.jComboBoxTipo.getSelectedIndex() != -1
+                    && this.buttonGroupPlantilla.getSelection() != null
+                    && this.jTextFieldCiudad.getText() != ""
+                    && Integer.parseInt(this.jSpinnerTotalPersonas.getValue() + "") != 0
+                    && Integer.parseInt(this.jSpinnerDiasA.getValue() + "") != 0
+                    && this.jDateChooserFecha.getDate() != null) {
+                SimpleDateFormat Formato = new SimpleDateFormat("YYYY-MM-dd");
+                persona = new Huesped(this.jTextFieldNombre.getText(), caracter.charAt(0), numero = Seleccionado(), this.jTextFieldCiudad.getText(), Integer.parseInt(this.jSpinnerTotalPersonas.getValue() + ""), Integer.parseInt(this.jSpinnerDiasA.getValue() + ""), this.jDateChooserFecha.getDate(), true);
+                System.out.println(persona.toString());
+                String parte1 = "Insert into huespedes (`Nombre`, `TipoHabitacion`, `NumeroHabitacion`, `CiudadOrigen`, `TotalPersonas`, `DiasAlojo`, `FechaIngreso`, `InHotel`) VALUES (";
+                String parte2 = "'" + persona.getNombre() + "','" + persona.getTipoHabitacion() + "','" + persona.getNumeroHabitacion() + "','" + persona.getCiudadOrigen() + "','" + persona.getTotalPersonas() + "','" + persona.getDiasAlojo() + "','" + Formato.format(persona.getFechaIngreso()) + "','" + 1 + "')";
+                String query = parte1 + parte2;
+
+                int j = this.conn.Update(query);
+                if (j == 1) {
+                    Voucher Tiquet = new Voucher(persona);
+                    Tiquet.setVisible(true);
+                    Limpiar();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al registrar ");
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(this, "No a acabado de completar los parametros de registro.");
+            }
+    }//GEN-LAST:event_jButtonRegistrarActionPerformed
+
+    private void jSpinnerTotalPersonasStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerTotalPersonasStateChanged
+        switch (this.jComboBoxTipo.getSelectedIndex()) { // Al agregar mas persona de lo que es la habitacion, aparece un mensaje de cargo extra.
+            case -1: {
+                this.jLabelTotalPersonaExtras.setVisible(false);
+                break;
+            }
+            case 0: {
+                if (Integer.parseInt(this.jSpinnerTotalPersonas.getValue() + "") > 1) {
+                    this.jLabelTotalPersonaExtras.setVisible(true);
+                } else {
+                    this.jLabelTotalPersonaExtras.setVisible(false);
+                }
+                break;
+            }
+            case 1: {
+                if (Integer.parseInt(this.jSpinnerTotalPersonas.getValue() + "") > 2) {
+                    this.jLabelTotalPersonaExtras.setVisible(true);
+                } else {
+                    this.jLabelTotalPersonaExtras.setVisible(false);
+                }
+                break;
+            }
+            case 2: {
+                if (Integer.parseInt(this.jSpinnerTotalPersonas.getValue() + "") > 3) {
+                    this.jLabelTotalPersonaExtras.setVisible(true);
+                } else {
+                    this.jLabelTotalPersonaExtras.setVisible(false);
+                }
+                break;
+            }
+        }
+    }//GEN-LAST:event_jSpinnerTotalPersonasStateChanged
 
     /**
      * @param args the command line arguments
@@ -401,19 +940,351 @@ public class Sistema extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupPlantilla;
+    private javax.swing.JButton jButtonRegistrar;
+    private javax.swing.JComboBox<String> jComboBoxTipo;
+    private com.toedter.calendar.JDateChooser jDateChooserFecha;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabelCiudad;
     private javax.swing.JLabel jLabelConsulta;
+    private javax.swing.JLabel jLabelDiasA;
+    private javax.swing.JLabel jLabelFecha;
     private javax.swing.JLabel jLabelGanancias;
+    private javax.swing.JLabel jLabelHabitacionesD;
+    private javax.swing.JLabel jLabelHabitacionesS;
+    private javax.swing.JLabel jLabelHabitacionesT;
     private javax.swing.JLabel jLabelIconUser;
     private javax.swing.JLabel jLabelLogo;
+    private javax.swing.JLabel jLabelNombre;
+    private javax.swing.JLabel jLabelPlantilla;
+    private javax.swing.JLabel jLabelPlantillaD;
+    private javax.swing.JLabel jLabelPlantillaS;
+    private javax.swing.JLabel jLabelPlantillaT;
     private javax.swing.JLabel jLabelRegistro;
     private javax.swing.JLabel jLabelSalida;
     private javax.swing.JLabel jLabelSalir;
+    private javax.swing.JLabel jLabelTipo;
+    private javax.swing.JLabel jLabelTotalHL;
+    private javax.swing.JLabel jLabelTotalPersonaExtras;
+    private javax.swing.JLabel jLabelTotalPersonas;
     private javax.swing.JLabel jLabelUsuario;
     private javax.swing.JPanel jPanel2Localizacion;
     private javax.swing.JPanel jPanelHome;
     private javax.swing.JPanel jPanelMenu;
+    private javax.swing.JPanel jPanelRegistro;
     private javax.swing.JPanel jPanelUsuario;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton10;
+    private javax.swing.JRadioButton jRadioButton11;
+    private javax.swing.JRadioButton jRadioButton12;
+    private javax.swing.JRadioButton jRadioButton13;
+    private javax.swing.JRadioButton jRadioButton14;
+    private javax.swing.JRadioButton jRadioButton15;
+    private javax.swing.JRadioButton jRadioButton16;
+    private javax.swing.JRadioButton jRadioButton17;
+    private javax.swing.JRadioButton jRadioButton18;
+    private javax.swing.JRadioButton jRadioButton19;
+    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButton20;
+    private javax.swing.JRadioButton jRadioButton21;
+    private javax.swing.JRadioButton jRadioButton22;
+    private javax.swing.JRadioButton jRadioButton23;
+    private javax.swing.JRadioButton jRadioButton24;
+    private javax.swing.JRadioButton jRadioButton25;
+    private javax.swing.JRadioButton jRadioButton26;
+    private javax.swing.JRadioButton jRadioButton27;
+    private javax.swing.JRadioButton jRadioButton28;
+    private javax.swing.JRadioButton jRadioButton29;
+    private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.JRadioButton jRadioButton30;
+    private javax.swing.JRadioButton jRadioButton4;
+    private javax.swing.JRadioButton jRadioButton5;
+    private javax.swing.JRadioButton jRadioButton6;
+    private javax.swing.JRadioButton jRadioButton7;
+    private javax.swing.JRadioButton jRadioButton8;
+    private javax.swing.JRadioButton jRadioButton9;
+    private javax.swing.JSpinner jSpinnerDiasA;
+    private javax.swing.JSpinner jSpinnerTotalPersonas;
+    private javax.swing.JTextField jTextFieldCiudad;
+    private javax.swing.JTextField jTextFieldNombre;
     // End of variables declaration//GEN-END:variables
+
+
+    //----------------------  Metodos para Registros -------------------------------
+    private void Ocultar(int opc) {     // Al selecciona un tipo de habitacion muestra o oculta los RadioButton 
+        SpinnerNumberModel modeloSpinner = new SpinnerNumberModel();
+        this.buttonGroupPlantilla.clearSelection();
+        switch (opc) {
+            case -1: {
+                modeloSpinner.setMinimum(0);
+                modeloSpinner.setMaximum(0);
+                this.jSpinnerTotalPersonas.setModel(modeloSpinner);
+                this.jLabelPlantillaS.setVisible(false);
+                this.jLabelPlantillaD.setVisible(false);
+                this.jLabelPlantillaT.setVisible(false);
+                this.jRadioButton1.setVisible(false);
+                this.jRadioButton2.setVisible(false);
+                this.jRadioButton3.setVisible(false);
+                this.jRadioButton4.setVisible(false);
+                this.jRadioButton5.setVisible(false);
+                this.jRadioButton6.setVisible(false);
+                this.jRadioButton7.setVisible(false);
+                this.jRadioButton8.setVisible(false);
+                this.jRadioButton9.setVisible(false);
+                this.jRadioButton10.setVisible(false);
+                this.jRadioButton11.setVisible(false);
+                this.jRadioButton12.setVisible(false);
+                this.jRadioButton13.setVisible(false);
+                this.jRadioButton14.setVisible(false);
+                this.jRadioButton15.setVisible(false);
+                this.jRadioButton16.setVisible(false);
+                this.jRadioButton17.setVisible(false);
+                this.jRadioButton18.setVisible(false);
+                this.jRadioButton19.setVisible(false);
+                this.jRadioButton20.setVisible(false);
+                this.jRadioButton21.setVisible(false);
+                this.jRadioButton22.setVisible(false);
+                this.jRadioButton23.setVisible(false);
+                this.jRadioButton24.setVisible(false);
+                this.jRadioButton25.setVisible(false);
+                this.jRadioButton26.setVisible(false);
+                this.jRadioButton27.setVisible(false);
+                this.jRadioButton28.setVisible(false);
+                this.jRadioButton29.setVisible(false);
+                this.jRadioButton30.setVisible(false);
+                break;
+            }
+            case 0: {
+                modeloSpinner.setMinimum(0);
+                modeloSpinner.setMaximum(3);
+                this.jSpinnerTotalPersonas.setModel(modeloSpinner);
+                this.jLabelPlantillaS.setVisible(true);
+                this.jLabelPlantillaD.setVisible(false);
+                this.jLabelPlantillaT.setVisible(false);
+                this.jRadioButton1.setVisible(true);
+                this.jRadioButton2.setVisible(true);
+                this.jRadioButton3.setVisible(true);
+                this.jRadioButton4.setVisible(true);
+                this.jRadioButton5.setVisible(false);
+                this.jRadioButton6.setVisible(false);
+                this.jRadioButton7.setVisible(false);
+                this.jRadioButton8.setVisible(false);
+                this.jRadioButton9.setVisible(false);
+                this.jRadioButton10.setVisible(false);
+                this.jRadioButton11.setVisible(false);
+                this.jRadioButton12.setVisible(true);
+                this.jRadioButton13.setVisible(true);
+                this.jRadioButton14.setVisible(true);
+                this.jRadioButton15.setVisible(true);
+                this.jRadioButton16.setVisible(true);
+                this.jRadioButton17.setVisible(false);
+                this.jRadioButton18.setVisible(false);
+                this.jRadioButton19.setVisible(false);
+                this.jRadioButton20.setVisible(false);
+                this.jRadioButton21.setVisible(false);
+                this.jRadioButton22.setVisible(false);
+                this.jRadioButton23.setVisible(false);
+                this.jRadioButton24.setVisible(false);
+                this.jRadioButton25.setVisible(false);
+                this.jRadioButton26.setVisible(false);
+                this.jRadioButton27.setVisible(false);
+                this.jRadioButton28.setVisible(false);
+                this.jRadioButton29.setVisible(false);
+                this.jRadioButton30.setVisible(true);
+                break;
+            }
+            case 1: {
+                modeloSpinner.setMinimum(0);
+                modeloSpinner.setMaximum(4);
+                this.jSpinnerTotalPersonas.setModel(modeloSpinner);
+                this.jLabelPlantillaS.setVisible(false);
+                this.jLabelPlantillaD.setVisible(true);
+                this.jLabelPlantillaT.setVisible(false);
+                this.jRadioButton1.setVisible(false);
+                this.jRadioButton2.setVisible(false);
+                this.jRadioButton3.setVisible(false);
+                this.jRadioButton4.setVisible(false);
+                this.jRadioButton5.setVisible(true);
+                this.jRadioButton6.setVisible(true);
+                this.jRadioButton7.setVisible(false);
+                this.jRadioButton8.setVisible(true);
+                this.jRadioButton9.setVisible(true);
+                this.jRadioButton10.setVisible(true);
+                this.jRadioButton11.setVisible(true);
+                this.jRadioButton12.setVisible(false);
+                this.jRadioButton13.setVisible(false);
+                this.jRadioButton14.setVisible(false);
+                this.jRadioButton15.setVisible(false);
+                this.jRadioButton16.setVisible(false);
+                this.jRadioButton17.setVisible(true);
+                this.jRadioButton18.setVisible(true);
+                this.jRadioButton19.setVisible(true);
+                this.jRadioButton20.setVisible(true);
+                this.jRadioButton21.setVisible(true);
+                this.jRadioButton22.setVisible(false);
+                this.jRadioButton23.setVisible(false);
+                this.jRadioButton24.setVisible(false);
+                this.jRadioButton25.setVisible(false);
+                this.jRadioButton26.setVisible(false);
+                this.jRadioButton27.setVisible(true);
+                this.jRadioButton28.setVisible(true);
+                this.jRadioButton29.setVisible(true);
+                this.jRadioButton30.setVisible(false);
+                break;
+            }
+            case 2: {
+                modeloSpinner.setMinimum(0);
+                modeloSpinner.setMaximum(5);
+                this.jSpinnerTotalPersonas.setModel(modeloSpinner);
+                this.jLabelPlantillaS.setVisible(false);
+                this.jLabelPlantillaD.setVisible(false);
+                this.jLabelPlantillaT.setVisible(true);
+                this.jRadioButton1.setVisible(false);
+                this.jRadioButton2.setVisible(false);
+                this.jRadioButton3.setVisible(false);
+                this.jRadioButton4.setVisible(false);
+                this.jRadioButton5.setVisible(false);
+                this.jRadioButton6.setVisible(false);
+                this.jRadioButton7.setVisible(true);
+                this.jRadioButton8.setVisible(false);
+                this.jRadioButton9.setVisible(false);
+                this.jRadioButton10.setVisible(false);
+                this.jRadioButton11.setVisible(false);
+                this.jRadioButton12.setVisible(false);
+                this.jRadioButton13.setVisible(false);
+                this.jRadioButton14.setVisible(false);
+                this.jRadioButton15.setVisible(false);
+                this.jRadioButton16.setVisible(false);
+                this.jRadioButton17.setVisible(false);
+                this.jRadioButton18.setVisible(false);
+                this.jRadioButton19.setVisible(false);
+                this.jRadioButton20.setVisible(false);
+                this.jRadioButton21.setVisible(false);
+                this.jRadioButton22.setVisible(true);
+                this.jRadioButton23.setVisible(true);
+                this.jRadioButton24.setVisible(true);
+                this.jRadioButton25.setVisible(true);
+                this.jRadioButton26.setVisible(true);
+                this.jRadioButton27.setVisible(false);
+                this.jRadioButton28.setVisible(false);
+                this.jRadioButton29.setVisible(false);
+                this.jRadioButton30.setVisible(false);
+                break;
+            }
+        }
+    }
+
+    private int Seleccionado() { // Solo sirve para saber si uno de los RadioButton esta seleccionado o no.
+        int i = 1;
+        for (Enumeration e = this.buttonGroupPlantilla.getElements(); e.hasMoreElements(); i++) {
+            JRadioButton b = (JRadioButton) e.nextElement();
+            if (b.getModel() == this.buttonGroupPlantilla.getSelection()) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private void Limpiar() { //Regresa todos los componentes para un nuevo registro.
+        Ocultar(-1);
+        this.jTextFieldNombre.setText("");
+        this.jComboBoxTipo.setSelectedIndex(-1);
+        this.jTextFieldCiudad.setText("");
+        this.jSpinnerTotalPersonas.setValue(0);
+        this.jSpinnerDiasA.setValue(0);
+        this.jDateChooserFecha.setDate(null);
+        this.jLabelTotalPersonaExtras.setVisible(false);
+
+        this.jRadioButton1.setEnabled(true);
+        this.jRadioButton1.setText("");
+        this.jRadioButton1.setOpaque(false);
+        this.jRadioButton2.setEnabled(true);
+        this.jRadioButton2.setText("");
+        this.jRadioButton2.setOpaque(false);
+        this.jRadioButton3.setEnabled(true);
+        this.jRadioButton3.setText("");
+        this.jRadioButton3.setOpaque(false);
+        this.jRadioButton4.setEnabled(true);
+        this.jRadioButton4.setText("");
+        this.jRadioButton4.setOpaque(false);
+        this.jRadioButton5.setEnabled(true);
+        this.jRadioButton5.setText("");
+        this.jRadioButton5.setOpaque(false);
+        this.jRadioButton6.setEnabled(true);
+        this.jRadioButton6.setText("");
+        this.jRadioButton6.setOpaque(false);
+        this.jRadioButton7.setEnabled(true);
+        this.jRadioButton7.setText("");
+        this.jRadioButton7.setOpaque(false);
+        this.jRadioButton8.setEnabled(true);
+        this.jRadioButton8.setText("");
+        this.jRadioButton8.setOpaque(false);
+        this.jRadioButton9.setEnabled(true);
+        this.jRadioButton9.setText("");
+        this.jRadioButton9.setOpaque(false);
+        this.jRadioButton10.setEnabled(true);
+        this.jRadioButton10.setText("");
+        this.jRadioButton10.setOpaque(false);
+        this.jRadioButton11.setEnabled(true);
+        this.jRadioButton11.setText("");
+        this.jRadioButton11.setOpaque(false);
+        this.jRadioButton12.setEnabled(true);
+        this.jRadioButton12.setText("");
+        this.jRadioButton12.setOpaque(false);
+        this.jRadioButton13.setEnabled(true);
+        this.jRadioButton13.setText("");
+        this.jRadioButton13.setOpaque(false);
+        this.jRadioButton14.setEnabled(true);
+        this.jRadioButton14.setText("");
+        this.jRadioButton14.setOpaque(false);
+        this.jRadioButton15.setEnabled(true);
+        this.jRadioButton15.setText("");
+        this.jRadioButton15.setOpaque(false);
+        this.jRadioButton16.setEnabled(true);
+        this.jRadioButton16.setText("");
+        this.jRadioButton16.setOpaque(false);
+        this.jRadioButton17.setEnabled(true);
+        this.jRadioButton17.setText("");
+        this.jRadioButton17.setOpaque(false);
+        this.jRadioButton18.setEnabled(true);
+        this.jRadioButton18.setText("");
+        this.jRadioButton18.setOpaque(false);
+        this.jRadioButton19.setEnabled(true);
+        this.jRadioButton19.setText("");
+        this.jRadioButton19.setOpaque(false);
+        this.jRadioButton20.setEnabled(true);
+        this.jRadioButton20.setText("");
+        this.jRadioButton20.setOpaque(false);
+        this.jRadioButton21.setEnabled(true);
+        this.jRadioButton21.setText("");
+        this.jRadioButton21.setOpaque(false);
+        this.jRadioButton22.setEnabled(true);
+        this.jRadioButton22.setText("");
+        this.jRadioButton22.setOpaque(false);
+        this.jRadioButton23.setEnabled(true);
+        this.jRadioButton23.setText("");
+        this.jRadioButton23.setOpaque(false);
+        this.jRadioButton24.setEnabled(true);
+        this.jRadioButton24.setText("");
+        this.jRadioButton24.setOpaque(false);
+        this.jRadioButton25.setEnabled(true);
+        this.jRadioButton25.setText("");
+        this.jRadioButton25.setOpaque(false);
+        this.jRadioButton26.setEnabled(true);
+        this.jRadioButton26.setText("");
+        this.jRadioButton26.setOpaque(false);
+        this.jRadioButton27.setEnabled(true);
+        this.jRadioButton27.setText("");
+        this.jRadioButton27.setOpaque(false);
+        this.jRadioButton28.setEnabled(true);
+        this.jRadioButton28.setText("");
+        this.jRadioButton28.setOpaque(false);
+        this.jRadioButton29.setEnabled(true);
+        this.jRadioButton29.setText("");
+        this.jRadioButton29.setOpaque(false);
+        this.jRadioButton30.setEnabled(true);
+        this.jRadioButton30.setText("");
+        this.jRadioButton30.setOpaque(false);
+    }
 
 }
