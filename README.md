@@ -88,16 +88,16 @@ Registro completado.
 IMAGEN de pantalla de GitHub o equivalente donde se vean los colaboradores o miembros del equipo. 
 
 - [ ]   #37: Un Archivo pdf   que contenga lo siguiente:
-·         Portada (incluir el nombre del sistema)
-·         El link donde puedo descargar el video, el link tiene que ser de acceso publico de no ser así, penalizare con 20 pts menos sobre la calif del proyecto final, por la molestia de tener que buscarlos para que quiten el candado al acceso.  
-·         El Link para descargar el proyecto de GitHub igual NO QUIERO PROBLEMAS de no tener acceso.
-·         Darme todas las cuentas y contraseñas de cada uno de los miembros del equipo
-·         Reporte de actividades de cada miembro del equipo (Lo que le toco hacer a cada quien) este reporte debe tener el visto bueno del jefe del equipo quien lo debe firmar,  es obligatoria la firma de visto bueno del jefe en cada reporte de integrante de equipo.
-·         Conclusiones de haber realizado este proyecto, UNA CONCLUSION por cada miembro del equipo
+Portada (incluir el nombre del sistema)
+El link donde puedo descargar el video, el link tiene que ser de acceso publico de no ser así, penalizare con 20 pts menos sobre la calif del proyecto final, por la molestia de tener que buscarlos para que quiten el candado al acceso.  
+El Link para descargar el proyecto de GitHub igual NO QUIERO PROBLEMAS de no tener acceso.
+Darme todas las cuentas y contraseñas de cada uno de los miembros del equipo
+Reporte de actividades de cada miembro del equipo (Lo que le toco hacer a cada quien) este reporte debe tener el visto bueno del jefe del equipo quien lo debe firmar,  es obligatoria la firma de visto bueno del jefe en cada reporte de integrante de equipo.
+Conclusiones de haber realizado este proyecto, UNA CONCLUSION por cada miembro del equipo
 
 - [ ]   #38: Archivos de respaldos de la base de datos (Habrá penalización de 20 puntos menos en su calif del proyecto si me dan una base de datos vacía )
-·         Archivo de respaldo de su base datos, CON DATOS para poder hacer mis consultas y no entretenerme en registrar muchos datos. 
-·         Archivo de respaldo de donde tengan almacenadas las cuentas y contraseñas encriptadas, si todo es en la misma base de datos, está bien solo suban un respaldo.
+Archivo de respaldo de su base datos, CON DATOS para poder hacer mis consultas y no entretenerme en registrar muchos datos. 
+Archivo de respaldo de donde tengan almacenadas las cuentas y contraseñas encriptadas, si todo es en la misma base de datos, está bien solo suban un respaldo.
 
 - [ ]   #39: Archivo de Excel de la rubrica DEBIDAMENTE calificada de acuerdo al video. Habrá una penalización de 20 pts menos sobre la calif del proyecto a los equipos que entreguen la rúbrica sin autocalificar o diferente a lo que estuvieron mostrando durante el video.
 
