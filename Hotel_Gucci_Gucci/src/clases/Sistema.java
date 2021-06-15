@@ -1,10 +1,19 @@
 package clases;
 
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -15,10 +24,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1CFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+
 
 public class Sistema extends javax.swing.JFrame {
 
     private int aux, numero, Cargo, CargoEx, Ganancias;
+    private int cont, S, D , T;
     Clip sonido;
     Clip sonido2;
     MySqlConn conn;
@@ -35,6 +53,7 @@ public class Sistema extends javax.swing.JFrame {
         initComponents();
         this.jLabelUsuario.setText(usuario); // Mostramos quien inicio sesion.
         Configuracion();
+        Ganancias = Actualizar(); // Iniciamos la variable de Ganacias del hotel con el valor que guardamos en un archivo y no con 0.
     }
 
     private void Configuracion() { // Configuracion es el acomodo de todas las variables y tamaños que deamos al iniciar el sistema.
@@ -42,13 +61,15 @@ public class Sistema extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/imagenes/login/Icono.png")));// Cambiar icono de ventana.
         try {// **************************** Cargamos los sonidos o musica *********************************
             sonido = AudioSystem.getClip();
-            sonido.open(AudioSystem.getAudioInputStream(new File("src\\audio\\sonido2.wav")));
+            sonido.open(AudioSystem.getAudioInputStream(new File("src/audio/sonido2.wav")));
             sonido2 = AudioSystem.getClip();
-            sonido2.open(AudioSystem.getAudioInputStream(new File("src\\audio\\sonido1.wav")));
+            sonido2.open(AudioSystem.getAudioInputStream(new File("src/audio/sonido1.wav")));
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
             JOptionPane.showMessageDialog(this, "Error no se pudo abrir el archivo");
         }
         this.jPanelRegistro.setVisible(false);// Ocualtamos los paneles no usados aun.
+        this.jPanelSalida.setVisible(false);// Ocualtamos los paneles no usados aun.
+        this.jPanelConsulta.setVisible(false);// Ocualtamos los paneles no usados aun.
         //***************************************** Configuracion de los JSpinners para el rango *******************
         SpinnerNumberModel modeloSpinner = new SpinnerNumberModel();
         modeloSpinner.setMinimum(0);
@@ -61,6 +82,11 @@ public class Sistema extends javax.swing.JFrame {
         Desabilitar.setEditable(false);
         JFormattedTextField Desabilitar2 = ((JSpinner.DefaultEditor) this.jSpinnerTotalPersonas.getEditor()).getTextField();
         Desabilitar2.setEditable(false);
+        //***************************************** Inicializar ComboBox en nada y ocultar los RadioButton************
+        this.jComboBoxTipo.setSelectedIndex(-1);
+        Ocultar(this.jComboBoxTipo.getSelectedIndex());
+        this.jComboBoxHabitacion.setSelectedIndex(-1);
+        Buscar(this.jComboBoxHabitacion.getSelectedIndex()); // limpiamos todo lo del panel salida.
     }
 
     /**
@@ -140,6 +166,43 @@ public class Sistema extends javax.swing.JFrame {
         jLabelHabitacionesS = new javax.swing.JLabel();
         jLabelHabitacionesD = new javax.swing.JLabel();
         jLabelHabitacionesT = new javax.swing.JLabel();
+        jPanelSalida = new javax.swing.JPanel();
+        jLabelSalidaHuesped = new javax.swing.JLabel();
+        jLabelHabitacion = new javax.swing.JLabel();
+        jComboBoxHabitacion = new javax.swing.JComboBox<>();
+        jLabelNombreHuesped = new javax.swing.JLabel();
+        jLabelTipoH = new javax.swing.JLabel();
+        jLabelPersonasExtras = new javax.swing.JLabel();
+        jLabelDiasAlojo = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        jCheckBox3 = new javax.swing.JCheckBox();
+        jCheckBox4 = new javax.swing.JCheckBox();
+        jCheckBox5 = new javax.swing.JCheckBox();
+        jCheckBox6 = new javax.swing.JCheckBox();
+        jLabelMontoCuenta = new javax.swing.JLabel();
+        jLabelMontoCargosExt = new javax.swing.JLabel();
+        jLabelMontoTotal = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabelCargosExtras = new javax.swing.JLabel();
+        jLabelCuenta = new javax.swing.JLabel();
+        jLabelTotal = new javax.swing.JLabel();
+        jButtonPagarGenerar = new javax.swing.JButton();
+        jLabelFotoS = new javax.swing.JLabel();
+        jLabelFotoD = new javax.swing.JLabel();
+        jLabelFotoT = new javax.swing.JLabel();
+        jLabelFotoO = new javax.swing.JLabel();
+        jPanelConsulta = new javax.swing.JPanel();
+        jButtonConsulta1 = new javax.swing.JButton();
+        jButtonConsulta2 = new javax.swing.JButton();
+        jButtonConsulta3 = new javax.swing.JButton();
+        jButtonConsulta4 = new javax.swing.JButton();
+        jButtonConsulta5 = new javax.swing.JButton();
+        jButtonConsulta6 = new javax.swing.JButton();
+        jButtonConsulta7 = new javax.swing.JButton();
+        jButtonConsulta8 = new javax.swing.JButton();
+        jButtonConsulta9 = new javax.swing.JButton();
+        jButtonConsulta10 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hotel Gucci Gucci");
@@ -697,6 +760,240 @@ public class Sistema extends javax.swing.JFrame {
         getContentPane().add(jPanelRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 780, 530));
         jPanelRegistro.getAccessibleContext().setAccessibleName("");
 
+        jPanelSalida.setBackground(new java.awt.Color(62, 63, 99));
+        jPanelSalida.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelSalidaHuesped.setFont(new java.awt.Font("Nirmala UI", 1, 24)); // NOI18N
+        jLabelSalidaHuesped.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelSalidaHuesped.setText("Salida del Huespéd");
+        jPanelSalida.add(jLabelSalidaHuesped, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, -1, -1));
+
+        jLabelHabitacion.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelHabitacion.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelHabitacion.setText("Habitacion:");
+        jPanelSalida.add(jLabelHabitacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, -1, -1));
+
+        jComboBoxHabitacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019", "020", "021", "022", "023", "024", "025", "026", "027", "028", "029", "030" }));
+        jComboBoxHabitacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxHabitacionActionPerformed(evt);
+            }
+        });
+        jPanelSalida.add(jComboBoxHabitacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 90, 120, -1));
+
+        jLabelNombreHuesped.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelNombreHuesped.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelNombreHuesped.setText("Nombre Huesped");
+        jPanelSalida.add(jLabelNombreHuesped, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 90, -1, -1));
+
+        jLabelTipoH.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelTipoH.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelTipoH.setText("Tipo de Habitacion:");
+        jPanelSalida.add(jLabelTipoH, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 110, -1, -1));
+
+        jLabelPersonasExtras.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelPersonasExtras.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelPersonasExtras.setText("Personas Extras:");
+        jPanelSalida.add(jLabelPersonasExtras, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, -1, -1));
+
+        jLabelDiasAlojo.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelDiasAlojo.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelDiasAlojo.setText("Noches:");
+        jPanelSalida.add(jLabelDiasAlojo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, -1, -1));
+
+        jCheckBox1.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox1.setText("Servicio al cuarto ($250)");
+        jCheckBox1.setOpaque(false);
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+        jPanelSalida.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 160, 200, -1));
+
+        jCheckBox2.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jCheckBox2.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox2.setText("Servicio de bar ($670)");
+        jCheckBox2.setOpaque(false);
+        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox2ActionPerformed(evt);
+            }
+        });
+        jPanelSalida.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 190, 180, -1));
+
+        jCheckBox3.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jCheckBox3.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox3.setText("Servicio tintorería ($130)");
+        jCheckBox3.setOpaque(false);
+        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox3ActionPerformed(evt);
+            }
+        });
+        jPanelSalida.add(jCheckBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 220, 200, -1));
+
+        jCheckBox4.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jCheckBox4.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox4.setText("Servicio SPA ($1,500)");
+        jCheckBox4.setOpaque(false);
+        jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox4ActionPerformed(evt);
+            }
+        });
+        jPanelSalida.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 250, 170, -1));
+
+        jCheckBox5.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jCheckBox5.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox5.setText("Servicio de niñera ($240)");
+        jCheckBox5.setOpaque(false);
+        jCheckBox5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox5ActionPerformed(evt);
+            }
+        });
+        jPanelSalida.add(jCheckBox5, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 280, 200, -1));
+
+        jCheckBox6.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jCheckBox6.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox6.setText("Servicio de transporte ($300)");
+        jCheckBox6.setOpaque(false);
+        jCheckBox6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox6ActionPerformed(evt);
+            }
+        });
+        jPanelSalida.add(jCheckBox6, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 310, 220, -1));
+
+        jLabelMontoCuenta.setFont(new java.awt.Font("Nirmala UI", 1, 24)); // NOI18N
+        jLabelMontoCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelMontoCuenta.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabelMontoCuenta.setText("$0");
+        jLabelMontoCuenta.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jPanelSalida.add(jLabelMontoCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 390, 120, -1));
+
+        jLabelMontoCargosExt.setFont(new java.awt.Font("Nirmala UI", 1, 24)); // NOI18N
+        jLabelMontoCargosExt.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelMontoCargosExt.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabelMontoCargosExt.setText("$0");
+        jLabelMontoCargosExt.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jPanelSalida.add(jLabelMontoCargosExt, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 430, 120, -1));
+
+        jLabelMontoTotal.setFont(new java.awt.Font("Nirmala UI", 1, 24)); // NOI18N
+        jLabelMontoTotal.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelMontoTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabelMontoTotal.setText("$0");
+        jLabelMontoTotal.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jPanelSalida.add(jLabelMontoTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 480, 120, -1));
+        jPanelSalida.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 470, 190, 10));
+
+        jLabelCargosExtras.setFont(new java.awt.Font("Nirmala UI", 1, 18)); // NOI18N
+        jLabelCargosExtras.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelCargosExtras.setText("Cargos Extras:");
+        jPanelSalida.add(jLabelCargosExtras, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 430, -1, -1));
+
+        jLabelCuenta.setFont(new java.awt.Font("Nirmala UI", 1, 18)); // NOI18N
+        jLabelCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelCuenta.setText("Cuenta:");
+        jPanelSalida.add(jLabelCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(505, 390, -1, -1));
+
+        jLabelTotal.setFont(new java.awt.Font("Nirmala UI", 1, 18)); // NOI18N
+        jLabelTotal.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelTotal.setText("Total:");
+        jPanelSalida.add(jLabelTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 480, -1, -1));
+
+        jButtonPagarGenerar.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonPagarGenerar.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonPagarGenerar.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonPagarGenerar.setText("Pagar y generar PDF");
+        jButtonPagarGenerar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPagarGenerarActionPerformed(evt);
+            }
+        });
+        jPanelSalida.add(jButtonPagarGenerar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 470, 310, 40));
+
+        jLabelFotoS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sistema/HabitacionS.png"))); // NOI18N
+        jPanelSalida.add(jLabelFotoS, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, 330, 250));
+
+        jLabelFotoD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sistema/HabitacionD.png"))); // NOI18N
+        jPanelSalida.add(jLabelFotoD, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, 330, 250));
+
+        jLabelFotoT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sistema/HabitacionT.png"))); // NOI18N
+        jPanelSalida.add(jLabelFotoT, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, 330, 250));
+
+        jLabelFotoO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sistema/HabitacionO.png"))); // NOI18N
+        jPanelSalida.add(jLabelFotoO, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, 330, 250));
+
+        getContentPane().add(jPanelSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 780, 530));
+
+        jPanelConsulta.setBackground(new java.awt.Color(62, 63, 99));
+        jPanelConsulta.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jButtonConsulta1.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonConsulta1.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonConsulta1.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConsulta1.setText("Galería de fotos del hotel");
+        jPanelConsulta.add(jButtonConsulta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 300, 40));
+
+        jButtonConsulta2.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonConsulta2.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonConsulta2.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConsulta2.setText("Ingresos del hotel hasta el momento");
+        jPanelConsulta.add(jButtonConsulta2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 300, 40));
+
+        jButtonConsulta3.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonConsulta3.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonConsulta3.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConsulta3.setText("Porcentajes de ocupación por tipo de habitación");
+        jPanelConsulta.add(jButtonConsulta3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 300, 40));
+
+        jButtonConsulta4.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonConsulta4.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonConsulta4.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConsulta4.setText("Total de habitaciones que tiene el hotel");
+        jPanelConsulta.add(jButtonConsulta4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 300, 40));
+
+        jButtonConsulta5.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonConsulta5.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonConsulta5.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConsulta5.setText("Porcentaje de ocupación del hotel");
+        jPanelConsulta.add(jButtonConsulta5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 440, 300, 40));
+
+        jButtonConsulta6.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonConsulta6.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonConsulta6.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConsulta6.setText("Costos de las habitaciones");
+        jPanelConsulta.add(jButtonConsulta6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 80, 300, 40));
+
+        jButtonConsulta7.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonConsulta7.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonConsulta7.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConsulta7.setText("Piso y habitacion de un huesped");
+        jPanelConsulta.add(jButtonConsulta7, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 170, 300, 40));
+
+        jButtonConsulta8.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonConsulta8.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonConsulta8.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConsulta8.setText("Nombre de huesped por habitacion");
+        jPanelConsulta.add(jButtonConsulta8, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 260, 300, 40));
+
+        jButtonConsulta9.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonConsulta9.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonConsulta9.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConsulta9.setText("Habitaciones disponibles por piso");
+        jPanelConsulta.add(jButtonConsulta9, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 350, 300, 40));
+
+        jButtonConsulta10.setBackground(new java.awt.Color(38, 51, 100));
+        jButtonConsulta10.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jButtonConsulta10.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConsulta10.setText("Lista de personas hospedadas en el hotel");
+        jPanelConsulta.add(jButtonConsulta10, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 440, 300, 40));
+
+        getContentPane().add(jPanelConsulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 780, 530));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -754,7 +1051,7 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabelConsultaMouseExited
 
     private void jLabelRegistroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRegistroMouseClicked
-
+        if (Activos() < 30) {
             this.jLabelSalida.setBackground(new java.awt.Color(20, 45, 87));
             this.jLabelConsulta.setBackground(new java.awt.Color(20, 45, 87));
             this.jLabelRegistro.setBackground(new java.awt.Color(74, 98, 175));
@@ -762,8 +1059,14 @@ public class Sistema extends javax.swing.JFrame {
             sonido2.setFramePosition(0);
             this.jPanelHome.setVisible(false);
             this.jPanelRegistro.setVisible(true);
+            this.jPanelSalida.setVisible(false);
+            this.jPanelConsulta.setVisible(false);
             Limpiar();
+            Activos();
             aux = 1;
+        } else {
+            JOptionPane.showMessageDialog(this, "El Hotel esta lleno.");
+        }
     }//GEN-LAST:event_jLabelRegistroMouseClicked
 
     private void jLabelSalidaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelSalidaMouseClicked
@@ -775,6 +1078,10 @@ public class Sistema extends javax.swing.JFrame {
         sonido2.setFramePosition(0);
         this.jPanelHome.setVisible(false);
         this.jPanelRegistro.setVisible(false);
+        this.jPanelSalida.setVisible(true);
+        this.jPanelConsulta.setVisible(false);
+        Limpiar2();
+        this.jComboBoxHabitacion.setSelectedIndex(-1);
     }//GEN-LAST:event_jLabelSalidaMouseClicked
 
     private void jLabelConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelConsultaMouseClicked
@@ -786,6 +1093,8 @@ public class Sistema extends javax.swing.JFrame {
         sonido2.setFramePosition(0);
         this.jPanelHome.setVisible(false);
         this.jPanelRegistro.setVisible(false);
+        this.jPanelSalida.setVisible(false);
+        this.jPanelConsulta.setVisible(true);
     }//GEN-LAST:event_jLabelConsultaMouseClicked
 
     private void jLabelLogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelLogoMouseClicked
@@ -795,6 +1104,8 @@ public class Sistema extends javax.swing.JFrame {
         this.jLabelRegistro.setBackground(new java.awt.Color(20, 45, 87));
         this.jPanelHome.setVisible(true);
         this.jPanelRegistro.setVisible(false);
+        this.jPanelSalida.setVisible(false);
+        this.jPanelConsulta.setVisible(false);
     }//GEN-LAST:event_jLabelLogoMouseClicked
 
     private void jLabelSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelSalirMouseClicked
@@ -802,7 +1113,7 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabelSalirMouseClicked
 
     private void jLabelRegistroMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRegistroMouseReleased
-
+        if (Activos() < 30) {
             this.jLabelSalida.setBackground(new java.awt.Color(20, 45, 87));
             this.jLabelConsulta.setBackground(new java.awt.Color(20, 45, 87));
             this.jLabelRegistro.setBackground(new java.awt.Color(74, 98, 175));
@@ -810,8 +1121,14 @@ public class Sistema extends javax.swing.JFrame {
             sonido2.setFramePosition(0);
             this.jPanelHome.setVisible(false);
             this.jPanelRegistro.setVisible(true);
+            this.jPanelSalida.setVisible(false);
+            this.jPanelConsulta.setVisible(false);
             Limpiar();
+            Activos();
             aux = 1;
+        } else {
+            JOptionPane.showMessageDialog(this, "El Hotel esta lleno.");
+        }
     }//GEN-LAST:event_jLabelRegistroMouseReleased
 
     private void jLabelSalidaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelSalidaMouseReleased
@@ -822,6 +1139,9 @@ public class Sistema extends javax.swing.JFrame {
         sonido2.stop();
         this.jPanelHome.setVisible(false);
         this.jPanelRegistro.setVisible(false);
+        this.jPanelSalida.setVisible(true);
+        this.jPanelConsulta.setVisible(false);
+        this.jComboBoxHabitacion.setSelectedIndex(-1);
     }//GEN-LAST:event_jLabelSalidaMouseReleased
 
     private void jLabelConsultaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelConsultaMouseReleased
@@ -832,6 +1152,8 @@ public class Sistema extends javax.swing.JFrame {
         sonido2.stop();
         this.jPanelHome.setVisible(false);
         this.jPanelRegistro.setVisible(false);
+        this.jPanelSalida.setVisible(false);
+        this.jPanelConsulta.setVisible(true);
     }//GEN-LAST:event_jLabelConsultaMouseReleased
 
     private void jComboBoxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoActionPerformed
@@ -840,7 +1162,7 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxTipoActionPerformed
 
     private void jButtonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarActionPerformed
-
+        if (Activos() < 30) {
             String caracter = "" + this.jComboBoxTipo.getSelectedItem();
             if (this.jTextFieldNombre.getText() != ""
                     && this.jComboBoxTipo.getSelectedIndex() != -1
@@ -861,6 +1183,7 @@ public class Sistema extends javax.swing.JFrame {
                     Voucher Tiquet = new Voucher(persona);
                     Tiquet.setVisible(true);
                     Limpiar();
+                    Activos();
                 } else {
                     JOptionPane.showMessageDialog(this, "Error al registrar ");
                 }
@@ -868,6 +1191,14 @@ public class Sistema extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "No a acabado de completar los parametros de registro.");
             }
+            if (Activos() >= 30) {
+                JOptionPane.showMessageDialog(this, "La ultima habitacion se a ocupado y el registro fue exitoso\nEl Hotel esta lleno.");
+                this.jPanelHome.setVisible(true);
+                this.jPanelRegistro.setVisible(false);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "El Hotel esta lleno.");
+        }
     }//GEN-LAST:event_jButtonRegistrarActionPerformed
 
     private void jSpinnerTotalPersonasStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerTotalPersonasStateChanged
@@ -902,6 +1233,76 @@ public class Sistema extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jSpinnerTotalPersonasStateChanged
+
+    //----------------------  Eventos para Panel Salida -------------------------------
+
+    private void jButtonPagarGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPagarGenerarActionPerformed
+        GenerarPDF();
+        Desocupar();
+        Cargar();
+        Ganancias = Actualizar();
+        Limpiar2();
+
+        this.jComboBoxHabitacion.setSelectedIndex(-1);
+    }//GEN-LAST:event_jButtonPagarGenerarActionPerformed
+
+    private void jComboBoxHabitacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxHabitacionActionPerformed
+        Buscar(this.jComboBoxHabitacion.getSelectedIndex());
+    }//GEN-LAST:event_jComboBoxHabitacionActionPerformed
+    //           Los RadioButton al selecionarse o deselecionarse suman cantidades a la variable CargoEx y la muestran de nuevo.
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        if (this.jCheckBox1.isSelected()) {
+            CargoEx += 250;
+        } else {
+            CargoEx -= 250;
+        }
+        Cuenta();
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+        if (this.jCheckBox2.isSelected()) {
+            CargoEx += 670;
+        } else {
+            CargoEx -= 670;
+        }
+        Cuenta();
+    }//GEN-LAST:event_jCheckBox2ActionPerformed
+
+    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
+        if (this.jCheckBox3.isSelected()) {
+            CargoEx += 130;
+        } else {
+            CargoEx -= 130;
+        }
+        Cuenta();
+    }//GEN-LAST:event_jCheckBox3ActionPerformed
+
+    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+        if (this.jCheckBox4.isSelected()) {
+            CargoEx += 1500;
+        } else {
+            CargoEx -= 1500;
+        }
+        Cuenta();
+    }//GEN-LAST:event_jCheckBox4ActionPerformed
+
+    private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
+        if (this.jCheckBox5.isSelected()) {
+            CargoEx += 240;
+        } else {
+            CargoEx -= 240;
+        }
+        Cuenta();
+    }//GEN-LAST:event_jCheckBox5ActionPerformed
+
+    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
+        if (this.jCheckBox6.isSelected()) {
+            CargoEx += 300;
+        } else {
+            CargoEx -= 300;
+        }
+        Cuenta();
+    }//GEN-LAST:event_jCheckBox6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -940,38 +1341,74 @@ public class Sistema extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupPlantilla;
+    private javax.swing.JButton jButtonConsulta1;
+    private javax.swing.JButton jButtonConsulta10;
+    private javax.swing.JButton jButtonConsulta2;
+    private javax.swing.JButton jButtonConsulta3;
+    private javax.swing.JButton jButtonConsulta4;
+    private javax.swing.JButton jButtonConsulta5;
+    private javax.swing.JButton jButtonConsulta6;
+    private javax.swing.JButton jButtonConsulta7;
+    private javax.swing.JButton jButtonConsulta8;
+    private javax.swing.JButton jButtonConsulta9;
+    private javax.swing.JButton jButtonPagarGenerar;
     private javax.swing.JButton jButtonRegistrar;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JCheckBox jCheckBox6;
+    private javax.swing.JComboBox<String> jComboBoxHabitacion;
     private javax.swing.JComboBox<String> jComboBoxTipo;
     private com.toedter.calendar.JDateChooser jDateChooserFecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabelCargosExtras;
     private javax.swing.JLabel jLabelCiudad;
     private javax.swing.JLabel jLabelConsulta;
+    private javax.swing.JLabel jLabelCuenta;
     private javax.swing.JLabel jLabelDiasA;
+    private javax.swing.JLabel jLabelDiasAlojo;
     private javax.swing.JLabel jLabelFecha;
+    private javax.swing.JLabel jLabelFotoD;
+    private javax.swing.JLabel jLabelFotoO;
+    private javax.swing.JLabel jLabelFotoS;
+    private javax.swing.JLabel jLabelFotoT;
     private javax.swing.JLabel jLabelGanancias;
+    private javax.swing.JLabel jLabelHabitacion;
     private javax.swing.JLabel jLabelHabitacionesD;
     private javax.swing.JLabel jLabelHabitacionesS;
     private javax.swing.JLabel jLabelHabitacionesT;
     private javax.swing.JLabel jLabelIconUser;
     private javax.swing.JLabel jLabelLogo;
+    private javax.swing.JLabel jLabelMontoCargosExt;
+    private javax.swing.JLabel jLabelMontoCuenta;
+    private javax.swing.JLabel jLabelMontoTotal;
     private javax.swing.JLabel jLabelNombre;
+    private javax.swing.JLabel jLabelNombreHuesped;
+    private javax.swing.JLabel jLabelPersonasExtras;
     private javax.swing.JLabel jLabelPlantilla;
     private javax.swing.JLabel jLabelPlantillaD;
     private javax.swing.JLabel jLabelPlantillaS;
     private javax.swing.JLabel jLabelPlantillaT;
     private javax.swing.JLabel jLabelRegistro;
     private javax.swing.JLabel jLabelSalida;
+    private javax.swing.JLabel jLabelSalidaHuesped;
     private javax.swing.JLabel jLabelSalir;
     private javax.swing.JLabel jLabelTipo;
+    private javax.swing.JLabel jLabelTipoH;
+    private javax.swing.JLabel jLabelTotal;
     private javax.swing.JLabel jLabelTotalHL;
     private javax.swing.JLabel jLabelTotalPersonaExtras;
     private javax.swing.JLabel jLabelTotalPersonas;
     private javax.swing.JLabel jLabelUsuario;
     private javax.swing.JPanel jPanel2Localizacion;
+    private javax.swing.JPanel jPanelConsulta;
     private javax.swing.JPanel jPanelHome;
     private javax.swing.JPanel jPanelMenu;
     private javax.swing.JPanel jPanelRegistro;
+    private javax.swing.JPanel jPanelSalida;
     private javax.swing.JPanel jPanelUsuario;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton10;
@@ -1003,12 +1440,66 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton7;
     private javax.swing.JRadioButton jRadioButton8;
     private javax.swing.JRadioButton jRadioButton9;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSpinner jSpinnerDiasA;
     private javax.swing.JSpinner jSpinnerTotalPersonas;
     private javax.swing.JTextField jTextFieldCiudad;
     private javax.swing.JTextField jTextFieldNombre;
     // End of variables declaration//GEN-END:variables
 
+    private void Cargar() { // Carga al archivo binario las ganancias despues de las salida de un huesped.
+        FileOutputStream fos = null;
+        DataOutputStream salida = null;
+        try {
+            fos = new FileOutputStream("src/ganancias.dat");
+            salida = new DataOutputStream(fos);
+            salida.writeInt(Ganancias + Cargo + CargoEx);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+                if (salida != null) {
+                    salida.close();
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private int Actualizar() { // Extraer el valor del archivo binario a la variable Ganacias del hotel.
+        int N = 0;
+        FileInputStream fis = null;
+        DataInputStream entrada = null;
+        try {
+            fis = new FileInputStream("src/ganancias.dat");
+            entrada = new DataInputStream(fis);
+            N = entrada.readInt();  //se lee  un entero del fichero                                           
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            N = 0;
+        } finally {
+            try {
+                if (fis != null) {
+                    fis.close();
+                }
+                if (entrada != null) {
+                    entrada.close();
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        this.jLabelGanancias.setText("Ganancias: $" + N);
+        return N;
+    }
 
     //----------------------  Metodos para Registros -------------------------------
     private void Ocultar(int opc) {     // Al selecciona un tipo de habitacion muestra o oculta los RadioButton 
@@ -1287,9 +1778,234 @@ public class Sistema extends javax.swing.JFrame {
         this.jRadioButton30.setOpaque(false);
     }
 
-}
+    private int Activos() { // Es para llevar una cuenta de las habitaciones que estan libres en el hotel y mostrarlas.
+        String query = "SELECT * FROM `huespedes`";
+        this.conn.Consult(query);
+        cont=0;
+        S = 0;
+        D = 0;
+        T = 0;
+        try {
+            do {
+                if (this.conn.rs.getInt(8) == 1) {
+                    cont++;
+                    Bloquear(this.conn.rs.getInt(3)); // Mandamos el numero de habitacion que este ocupada.
+                    switch (this.conn.rs.getString(2).charAt(0)) {
+                        case 'S': {
+                            S++;
+                            break;
+                        }
+                        case 'D': {
+                            D++;
+                            break;
+                        }
+                        case 'T': {
+                            T++;
+                            break;
+                        }
+                    }
+                }
+            } while (this.conn.rs.next());
+        } catch (SQLException ex) {
+            System.out.println("Error...");
+        }
+        Conteo(cont, S, D, T);
+        return cont;
+    }
 
- //----------------------  Metodos para Salidas -------------------------------
+    private void Conteo(int cont, int S, int D, int T) { // es parte del metodo Activos y solo escribe las habitaciones que estan libres en los JLabels.
+        this.jLabelTotalHL.setText("Total de Habitaciones Libres: " + (30 - cont));
+        this.jLabelHabitacionesS.setText("Habitaciones Simples: " + (10 - S));
+        this.jLabelHabitacionesD.setText("Habitaciones Dobles: " + (14 - D));
+        this.jLabelHabitacionesT.setText("Habitaciones Triples: " + (6 - T));
+    }
+
+    private void Bloquear(int N) { //Bloque el RadioButton que se le mando en el metodo Activos.
+        switch (N) {
+            case 1: {
+                this.jRadioButton1.setEnabled(false);
+                this.jRadioButton1.setText(" OCUPADO");
+                this.jRadioButton1.setOpaque(true);
+                break;
+            }
+            case 2: {
+                this.jRadioButton2.setEnabled(false);
+                this.jRadioButton2.setText(" OCUPADO");
+                this.jRadioButton2.setOpaque(true);
+                break;
+            }
+            case 3: {
+                this.jRadioButton3.setEnabled(false);
+                this.jRadioButton3.setText(" OCUPADO");
+                this.jRadioButton3.setOpaque(true);
+                break;
+            }
+            case 4: {
+                this.jRadioButton4.setEnabled(false);
+                this.jRadioButton4.setText(" OCUPADO");
+                this.jRadioButton4.setOpaque(true);
+                break;
+            }
+            case 5: {
+                this.jRadioButton5.setEnabled(false);
+                this.jRadioButton5.setText(" OCUPADO");
+                this.jRadioButton5.setOpaque(true);
+                break;
+            }
+            case 6: {
+                this.jRadioButton6.setEnabled(false);
+                this.jRadioButton6.setText(" OCUPADO");
+                this.jRadioButton6.setOpaque(true);
+                break;
+            }
+            case 7: {
+                this.jRadioButton7.setEnabled(false);
+                this.jRadioButton7.setText(" OCUPADO");
+                this.jRadioButton7.setOpaque(true);
+                break;
+            }
+            case 8: {
+                this.jRadioButton8.setEnabled(false);
+                this.jRadioButton8.setText(" OCUPADO");
+                this.jRadioButton8.setOpaque(true);
+                break;
+            }
+            case 9: {
+                this.jRadioButton9.setEnabled(false);
+                this.jRadioButton9.setText(" OCUPADO");
+                this.jRadioButton9.setOpaque(true);
+                break;
+            }
+            case 10: {
+                this.jRadioButton10.setEnabled(false);
+                this.jRadioButton10.setText(" OCUPADO");
+                this.jRadioButton10.setOpaque(true);
+                break;
+            }
+            case 11: {
+                this.jRadioButton11.setEnabled(false);
+                this.jRadioButton11.setText(" OCUPADO");
+                this.jRadioButton11.setOpaque(true);
+                break;
+            }
+            case 12: {
+                this.jRadioButton12.setEnabled(false);
+                this.jRadioButton12.setText(" OCUPADO");
+                this.jRadioButton12.setOpaque(true);
+                break;
+            }
+            case 13: {
+                this.jRadioButton13.setEnabled(false);
+                this.jRadioButton13.setText(" OCUPADO");
+                this.jRadioButton13.setOpaque(true);
+                break;
+            }
+            case 14: {
+                this.jRadioButton14.setEnabled(false);
+                this.jRadioButton14.setText(" OCUPADO");
+                this.jRadioButton14.setOpaque(true);
+                break;
+            }
+            case 15: {
+                this.jRadioButton15.setEnabled(false);
+                this.jRadioButton15.setText(" OCUPADO");
+                this.jRadioButton15.setOpaque(true);
+                break;
+            }
+            case 16: {
+                this.jRadioButton16.setEnabled(false);
+                this.jRadioButton16.setText(" OCUPADO");
+                this.jRadioButton16.setOpaque(true);
+                break;
+            }
+            case 17: {
+                this.jRadioButton17.setEnabled(false);
+                this.jRadioButton17.setText(" OCUPADO");
+                this.jRadioButton17.setOpaque(true);
+                break;
+            }
+            case 18: {
+                this.jRadioButton18.setEnabled(false);
+                this.jRadioButton18.setText(" OCUPADO");
+                this.jRadioButton18.setOpaque(true);
+                break;
+            }
+            case 19: {
+                this.jRadioButton19.setEnabled(false);
+                this.jRadioButton19.setText(" OCUPADO");
+                this.jRadioButton19.setOpaque(true);
+                break;
+            }
+            case 20: {
+                this.jRadioButton20.setEnabled(false);
+                this.jRadioButton20.setText(" OCUPADO");
+                this.jRadioButton20.setOpaque(true);
+                break;
+            }
+            case 21: {
+                this.jRadioButton21.setEnabled(false);
+                this.jRadioButton21.setText(" OCUPADO");
+                this.jRadioButton21.setOpaque(true);
+                break;
+            }
+            case 22: {
+                this.jRadioButton22.setEnabled(false);
+                this.jRadioButton22.setText(" OCUPADO");
+                this.jRadioButton22.setOpaque(true);
+                break;
+            }
+            case 23: {
+                this.jRadioButton23.setEnabled(false);
+                this.jRadioButton23.setText(" OCUPADO");
+                this.jRadioButton23.setOpaque(true);
+                break;
+            }
+            case 24: {
+                this.jRadioButton24.setEnabled(false);
+                this.jRadioButton24.setText(" OCUPADO");
+                this.jRadioButton24.setOpaque(true);
+                break;
+            }
+            case 25: {
+                this.jRadioButton25.setEnabled(false);
+                this.jRadioButton25.setText(" OCUPADO");
+                this.jRadioButton25.setOpaque(true);
+                break;
+            }
+            case 26: {
+                this.jRadioButton26.setEnabled(false);
+                this.jRadioButton26.setText(" OCUPADO");
+                this.jRadioButton26.setOpaque(true);
+                break;
+            }
+            case 27: {
+                this.jRadioButton27.setEnabled(false);
+                this.jRadioButton27.setText(" OCUPADO");
+                this.jRadioButton27.setOpaque(true);
+                break;
+            }
+            case 28: {
+                this.jRadioButton28.setEnabled(false);
+                this.jRadioButton28.setText(" OCUPADO");
+                this.jRadioButton28.setOpaque(true);
+                break;
+            }
+            case 29: {
+                this.jRadioButton29.setEnabled(false);
+                this.jRadioButton29.setText(" OCUPADO");
+                this.jRadioButton29.setOpaque(true);
+                break;
+            }
+            case 30: {
+                this.jRadioButton30.setEnabled(false);
+                this.jRadioButton30.setText("OCUPADO");
+                this.jRadioButton30.setOpaque(true);
+                break;
+            }
+        }
+    }
+
+    //----------------------  Metodos para Salidas -------------------------------
     private void Buscar(int indice) {  // Mostramos y Activamos si se encuentra alguien en la habitacion que se le manda.
         indice++;
         Cargo = 0;
@@ -1365,7 +2081,7 @@ public class Sistema extends javax.swing.JFrame {
         this.jLabelNombreHuesped.setText("Huesped: " + user.getNombre());
         this.jLabelDiasAlojo.setVisible(true);
         int piso;
-        if (user.getTotalPersonas() > 15) {
+        if (this.jComboBoxHabitacion.getSelectedIndex() > 14) {
             piso = 2;
         } else {
             piso = 1;
@@ -1814,6 +2530,4 @@ public class Sistema extends javax.swing.JFrame {
            System.out.println(ex);
         }
     }  
-    
 }
-
