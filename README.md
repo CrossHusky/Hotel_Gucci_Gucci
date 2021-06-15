@@ -6,19 +6,19 @@
 
 - [x]   #02: Después aparecer otra pantalla del sistema, con el nombre del hotel, lema, logotipo, imágenes, sonido, se espera una gran pantalla de presentación del sistema.  Con la opción de login y contraseña para ingresar al sistema, debes tener una cuenta por cada miembro del equipo. Las contraseñas deben estar encriptadas en la base de datos. Obligatorio uso de la clase Graphics ( imáge(s) )
 
-- [ ]   #03: Menu del Sistema con las opciones Registro, Salida y Consultas. En consultas mostrarme el submenu o el lugar donde acceso a las 10 consultas que pedi 
+- [x]   #03: Menu del Sistema con las opciones Registro, Salida y Consultas. En consultas mostrarme el submenu o el lugar donde acceso a las 10 consultas que pedi 
 
 - [ ]   #04: Mostrarme en phpMyAdmin la BD y campos de sus tablas utilizadas en el sistema. Deberan contener informacion de huespedes ya registrados, espero ver al menos 10 huespedes (registros en su base de datos) que registren antes de empezar el video. Tambien los ingresos del hotel debe tener alguna cantidad  consecuencia de salidas de huespedes que ustedes hayan realizado antes de empezar el video
 
-- [ ]   #05: Mostrarme en el codigo la linea que arma la cadena del insert into para ejecutar el alta o regisgtro de huesped en MySql
+- [x]   #05: Mostrarme en el codigo la linea que arma la cadena del insert into para ejecutar el alta o regisgtro de huesped en MySql
 
-- [ ]   #06: Registren un huesped (registrar datos correctos, nombre con apellido, etc) Para el registro de un huésped, pedir nombre, tipo de habitación que desea, ciudad origen, total de personas que ocuparan la habitación (incluida la persona que se registra) y total de días que se va a quedar en el hotel. Tambien se registra la fecha de ingreso.
+- [x]   #06: Registren un huesped (registrar datos correctos, nombre con apellido, etc) Para el registro de un huésped, pedir nombre, tipo de habitación que desea, ciudad origen, total de personas que ocuparan la habitación (incluida la persona que se registra) y total de días que se va a quedar en el hotel. Tambien se registra la fecha de ingreso.
 
-- [ ]   #07: De acuerdo al tipo de habitación, validar que existan habitaciones disponibles en el hotel. En caso de que si, mostrar con imagen en pantalla los números de habitación disponibles en cada piso para el huésped elija. Tu con control interno al seleccionar la que desea ya la deberás marcar como ocupada
+- [x]   #07: De acuerdo al tipo de habitación, validar que existan habitaciones disponibles en el hotel. En caso de que si, mostrar con imagen en pantalla los números de habitación disponibles en cada piso para el huésped elija. Tu con control interno al seleccionar la que desea ya la deberás marcar como ocupada
 
-- [ ]   #08:  De acuerdo al tipo de habitacion validar, que el total de personas que la ocuparan este autorizado con respecto a lo permitido en cada tipo de habitación (sencilla, doble o triple). En caso de querer incluir una persona más en cualquier tipo de habitación, incluye un cargo extra de $  por noche. (El $ cargo extra el equipo lo decide) Notificar  al huésped de este cargo extra por noche. Solo es posible incluir dos personas extra en cualquier tipo de habitación
+- [x]   #08:  De acuerdo al tipo de habitacion validar, que el total de personas que la ocuparan este autorizado con respecto a lo permitido en cada tipo de habitación (sencilla, doble o triple). En caso de querer incluir una persona más en cualquier tipo de habitación, incluye un cargo extra de $  por noche. (El $ cargo extra el equipo lo decide) Notificar  al huésped de este cargo extra por noche. Solo es posible incluir dos personas extra en cualquier tipo de habitación
 
-- [ ]   #09: Imprimir en pantalla un  recibo o voucher del registro con los siguientes datos:   
+- [x]   #09: Imprimir en pantalla un  recibo o voucher del registro con los siguientes datos:   
 1 Nombre y Logo del hotel
 2 Lema del hotel
 3  Ubicación del hotel
@@ -32,11 +32,11 @@
                                           □1 persona extra     □ 2 personas extra
 Registro completado.
 
-- [ ]   #10: Proceder a realizar 3 registros mas, necesito registros de huespedes para cada tipo de habitacion y que alguno maneje cargo extra por incluir alguna persona mas
+- [x]   #10: Proceder a realizar 3 registros mas, necesito registros de huespedes para cada tipo de habitacion y que alguno maneje cargo extra por incluir alguna persona mas
 
-- [ ]   #11: Mostrarme en la tabla de phpMyAdmin que los 4  registros que me mostraron en el video se dieron de alta en la tabla
+- [x]   #11: Mostrarme en la tabla de phpMyAdmin que los 4  registros que me mostraron en el video se dieron de alta en la tabla
 
-- [ ]   #12: Mostrarme en codigo que tienen la validacion de HOTEL LLENO 
+- [x]   #12: Mostrarme en codigo que tienen la validacion de HOTEL LLENO 
 
 - [ ]   #13: Mostrarme en el phpMyAdmin o en el archivo o como lo haya hecho donde esta guardado los ingresos del hotel hasta el momento, me interesa ver que valor tiene y despues de que el huesped pague su cuenta, esa cantidad debera actualizarse
 
