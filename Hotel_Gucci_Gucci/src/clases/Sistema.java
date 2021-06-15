@@ -1288,3 +1288,532 @@ public class Sistema extends javax.swing.JFrame {
     }
 
 }
+
+ //----------------------  Metodos para Salidas -------------------------------
+    private void Buscar(int indice) {  // Mostramos y Activamos si se encuentra alguien en la habitacion que se le manda.
+        indice++;
+        Cargo = 0;
+        CargoEx = 0;
+        Consultar(indice);
+        Limpiar2();
+        if (persona != null && indice != 0) {
+            CalcularYActivar(persona);
+        } else {
+            Limpiar2();
+            this.jLabelNombreHuesped.setVisible(true);
+            this.jLabelNombreHuesped.setText("Esta Descupado");
+        }
+    }
+
+    private void Limpiar2() { //Regresa todos los componentes para una nueva salida.
+        this.jLabelNombreHuesped.setVisible(false);
+        this.jLabelTipoH.setVisible(false);
+        this.jLabelPersonasExtras.setVisible(false);
+        this.jLabelDiasAlojo.setVisible(false);
+
+        this.jLabelMontoCuenta.setText("$0");
+        this.jLabelMontoCargosExt.setText("$0");
+        this.jLabelMontoTotal.setText("$0");
+
+        this.jCheckBox1.setSelected(false);
+        this.jCheckBox2.setSelected(false);
+        this.jCheckBox3.setSelected(false);
+        this.jCheckBox4.setSelected(false);
+        this.jCheckBox5.setSelected(false);
+        this.jCheckBox6.setSelected(false);
+        this.jCheckBox1.setEnabled(false);
+        this.jCheckBox2.setEnabled(false);
+        this.jCheckBox3.setEnabled(false);
+        this.jCheckBox4.setEnabled(false);
+        this.jCheckBox5.setEnabled(false);
+        this.jCheckBox6.setEnabled(false);
+
+        this.jLabelFotoS.setVisible(false);
+        this.jLabelFotoD.setVisible(false);
+        this.jLabelFotoT.setVisible(false);
+
+        this.jButtonPagarGenerar.setEnabled(false);
+    }
+
+    private void Consultar(int i) {// Consulta la informacion del huesped de la habitacion de buscar si es que esta ocupada, sino solo la coloca como null.
+        String query = "SELECT * FROM `huespedes`";
+        this.conn.Consult(query);
+        try {
+            do {
+                if (this.conn.rs.getInt(3) == i && this.conn.rs.getInt(8) == 1) {
+                    persona = new Huesped( //  Si la habitacion esta ocupada, pasamos la informacion aun objeto persona.
+                            this.conn.rs.getString(1),
+                            this.conn.rs.getString(2).charAt(0),
+                            this.conn.rs.getInt(3),
+                            this.conn.rs.getString(4),
+                            this.conn.rs.getInt(5),
+                            this.conn.rs.getInt(6),
+                            this.conn.rs.getDate(7), true);
+                    break;
+                } else {
+                    persona = null;// Si la habitacion esta desocupada, el objeto persona queda como vacio (null).
+                }
+            } while (this.conn.rs.next());
+        } catch (SQLException ex) {
+            System.out.println("Error...");
+        }
+    }
+
+    private void CalcularYActivar(Huesped user) {   //Activa los componentes para la salida del huesped y calcula lo Cargos extra y Servicios ademas de mostrar la informacion sobre el huesped y habitacion.
+        this.jLabelNombreHuesped.setVisible(true);
+        this.jLabelTipoH.setVisible(true);
+        this.jLabelNombreHuesped.setText("Huesped: " + user.getNombre());
+        this.jLabelDiasAlojo.setVisible(true);
+        int piso;
+        if (user.getTotalPersonas() > 15) {
+            piso = 2;
+        } else {
+            piso = 1;
+        }
+
+        this.jCheckBox1.setEnabled(true);
+        this.jCheckBox2.setEnabled(true);
+        this.jCheckBox3.setEnabled(true);
+        this.jCheckBox4.setEnabled(true);
+        this.jCheckBox5.setEnabled(true);
+        this.jCheckBox6.setEnabled(true);
+
+        this.jButtonPagarGenerar.setEnabled(true);
+
+        switch (user.getTipoHabitacion()) {
+            case 'S': {
+                this.jLabelDiasAlojo.setText("$350 la noche X " + user.getDiasAlojo() + " noches de alojo = $" + (350 * user.getDiasAlojo()));
+                Cargo += (350 * user.getDiasAlojo());
+                if (user.getTotalPersonas() > 1) {
+                    this.jLabelPersonasExtras.setVisible(true);
+                    if ((user.getTotalPersonas() - 1) == 1) {
+                        this.jLabelPersonasExtras.setText("1 Persona Extra($150)");
+                        CargoEx += 150;
+                    } else {
+                        this.jLabelPersonasExtras.setText("2 Persona Extra($300)");
+                        CargoEx += 300;
+                    }
+                }
+                this.jLabelTipoH.setText("El tipo de Habitacion es: Simple     Piso: " + piso);
+                this.jLabelFotoS.setVisible(true);
+                this.jLabelFotoD.setVisible(false);
+                this.jLabelFotoT.setVisible(false);
+                break;
+            }
+            case 'D': {
+                this.jLabelDiasAlojo.setText("$600 la noche X " + user.getDiasAlojo() + " noches de alojo = $" + (600 * user.getDiasAlojo()));
+                Cargo += (600 * user.getDiasAlojo());
+                if (user.getTotalPersonas() > 2) {
+                    this.jLabelPersonasExtras.setVisible(true);
+                    if ((user.getTotalPersonas() - 2) == 1) {
+                        this.jLabelPersonasExtras.setText("1 Persona Extra($200)");
+                        CargoEx += 200;
+                    } else {
+                        this.jLabelPersonasExtras.setText("2 Persona Extra($400)");
+                        CargoEx += 400;
+                    }
+                }
+                this.jLabelTipoH.setText("El tipo de Habitacion es: Doble     Piso: " + piso);
+                this.jLabelFotoS.setVisible(false);
+                this.jLabelFotoD.setVisible(true);
+                this.jLabelFotoT.setVisible(false);
+                break;
+            }
+            case 'T': {
+                this.jLabelDiasAlojo.setText("$900 la noche X " + user.getDiasAlojo() + " noches de alojo = $" + (900 * user.getDiasAlojo()));
+                Cargo += (900 * user.getDiasAlojo());
+                if (user.getTotalPersonas() > 3) {
+                    this.jLabelPersonasExtras.setVisible(true);
+                    if ((user.getTotalPersonas() - 3) == 1) {
+                        this.jLabelPersonasExtras.setText("1 Persona Extra($250)");
+                        CargoEx += 250;
+                    } else {
+                        this.jLabelPersonasExtras.setText("2 Persona Extra($500)");
+                        CargoEx += 500;
+                    }
+                }
+                this.jLabelTipoH.setText("El tipo de Habitacion es: Triple     Piso: " + piso);
+                this.jLabelFotoS.setVisible(false);
+                this.jLabelFotoD.setVisible(false);
+                this.jLabelFotoT.setVisible(true);
+                break;
+            }
+        }
+        Cuenta();
+    }
+
+    private void Cuenta() {// Metodo para mostrar las variables de Cargo y CargoEx ademas del total.
+        this.jLabelMontoCuenta.setText("$" + Cargo);
+        this.jLabelMontoCargosExt.setText("$" + CargoEx);
+        this.jLabelMontoTotal.setText("$" + (Cargo + CargoEx));
+    }
+
+    private void GenerarPDF() { // Acomoda la informacion de la salida de un huesped y imagenes en un PDF generado.
+        System.out.println("Documento PDF Generado...");
+        int N=0;
+        String Escritorio = System.getProperty("user.home")+"/Desktop";;
+        try{
+            PDDocument documento = new PDDocument();
+            PDPage pagina = new PDPage(PDRectangle.A4);
+            documento.addPage(pagina);
+            PDPageContentStream contenido = new PDPageContentStream(documento,pagina);
+            java.util.Date fecha = new Date();
+            SimpleDateFormat Formato = new SimpleDateFormat("dd/MM/YYYY");
+            
+            PDImageXObject Marco = PDImageXObject.createFromFile("src/imagenes/PDF/Marco.png", documento);
+            PDImageXObject Fondo = PDImageXObject.createFromFile("src/imagenes/PDF/FondoPDF.png", documento);
+            PDImageXObject Logo1 = PDImageXObject.createFromFile("src/imagenes/PDF/Logo.png", documento);
+            PDImageXObject Logo2 = PDImageXObject.createFromFile("src/imagenes/PDF/Logo2.png", documento);
+            
+            contenido.drawImage(Fondo,0,0,pagina.getMediaBox().getWidth(),pagina.getMediaBox().getHeight());
+            contenido.drawImage(Marco,0,0,pagina.getMediaBox().getWidth(),pagina.getMediaBox().getHeight());
+            contenido.drawImage(Logo1,160,570,300,220);
+            contenido.drawImage(Logo2,420,60,130,90);
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.TIMES_BOLD_ITALIC, 14);
+            contenido.newLineAtOffset((pagina.getMediaBox().getWidth()/2)-60, pagina.getMediaBox().getHeight()-285);
+            contenido.showText("As Good as Gucci can get");
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-330);
+            contenido.showText("Ubicacion:");
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(90, pagina.getMediaBox().getHeight()-350);
+            contenido.showText("• Calle: Ocean Dr # 600.");
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(90, pagina.getMediaBox().getHeight()-370);
+            contenido.showText("• Ciudad: Miami Beach.");
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(90, pagina.getMediaBox().getHeight()-390);
+            contenido.showText("• Estado: Florida(FL 33139), Estados Unidos.");
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-410);
+            contenido.showText("Fecha de hoy: "+Formato.format(fecha));
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-425);
+            contenido.showText("______________________________________________________________");
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-450);
+            contenido.showText("Nombre del huésped: "+persona.getNombre());
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-470);
+            contenido.showText("Ciudad de origen: "+persona.getCiudadOrigen());
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-490);
+            contenido.showText("Fecha de ingreso: "+Formato.format(persona.getFechaIngreso()));
+            contenido.endText();
+            
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(persona.getFechaIngreso());
+            cal.add(Calendar.DATE, persona.getDiasAlojo());
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-510);
+            contenido.showText("Fecha de salida: "+Formato.format(cal.getTime()));
+            contenido.endText();
+            
+            switch(persona.getTipoHabitacion()){
+                case 'S':{
+                    contenido.beginText();
+                    contenido.setFont(PDType1Font.COURIER, 11);
+                    contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-530);
+                    contenido.showText("Tipo de habitación: Simple");
+                    contenido.endText();
+                    
+                    contenido.beginText();
+                    contenido.setFont(PDType1Font.COURIER, 11);
+                    contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-550);
+                    contenido.showText("Costo de Habitacion: $350");
+                    contenido.endText();
+                    
+                    N=1;
+                    break;
+                }
+                case 'D':{
+                    contenido.beginText();
+                    contenido.setFont(PDType1Font.COURIER, 11);
+                    contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-530);
+                    contenido.showText("Tipo de habitación: Doble");
+                    contenido.endText();
+                    
+                    contenido.beginText();
+                    contenido.setFont(PDType1Font.COURIER, 11);
+                    contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-550);
+                    contenido.showText("Costo de Habitacion: $600");
+                    contenido.endText();
+                    
+                    N=2;
+                    break;
+                }
+                case 'T':{
+                    contenido.beginText();
+                    contenido.setFont(PDType1Font.COURIER, 11);
+                    contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-530);
+                    contenido.showText("Tipo de habitación: Triple");
+                    contenido.endText();
+                    
+                    contenido.beginText();
+                    contenido.setFont(PDType1Font.COURIER, 11);
+                    contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-550);
+                    contenido.showText("Costo de Habitacion: $900");
+                    contenido.endText();
+                    
+                    N=3;
+                    break;
+                }
+            }
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-570);
+            contenido.showText("Dias que se quedo en el hotel: "+persona.getDiasAlojo()+" Dias");
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-590);
+            contenido.showText("Total a pagar sin cargos Extra: $"+Cargo);
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(80, pagina.getMediaBox().getHeight()-610);
+            contenido.showText("Total a pagar con cargos Extra: $"+(Cargo+CargoEx));
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER, 11);
+            contenido.newLineAtOffset(360, pagina.getMediaBox().getHeight()-490);
+            contenido.showText("Lista de cargos extra: ");
+            contenido.endText();
+            
+            int pocicion=510;
+            if (persona.getTotalPersonas() > N) {
+                this.jLabelPersonasExtras.setVisible(true);
+                if ((persona.getTotalPersonas() - N) == 1) {
+                    switch(N){
+                        case 1:{
+                            contenido.beginText();
+                            contenido.setFont(PDType1Font.COURIER, 11);
+                            contenido.newLineAtOffset(360, pagina.getMediaBox().getHeight()-pocicion);
+                            contenido.showText("• 1 Persona Extra ($150)");
+                            contenido.endText();
+                            pocicion+=20;
+                            break;
+                        }
+                        case 2:{
+                            contenido.beginText();
+                            contenido.setFont(PDType1Font.COURIER, 11);
+                            contenido.newLineAtOffset(360, pagina.getMediaBox().getHeight()-pocicion);
+                            contenido.showText("• 1 Persona Extra ($200)");
+                            contenido.endText();
+                            pocicion+=20;
+                            break;
+                        }
+                        case 3:{
+                            contenido.beginText();
+                            contenido.setFont(PDType1Font.COURIER, 11);
+                            contenido.newLineAtOffset(360, pagina.getMediaBox().getHeight()-pocicion);
+                            contenido.showText("• 1 Persona Extra ($250)");
+                            contenido.endText();
+                            pocicion+=20;
+                            break;
+                        }
+                    }
+                } else {
+                    switch(N){
+                        case 1:{
+                            contenido.beginText();
+                            contenido.setFont(PDType1Font.COURIER, 11);
+                            contenido.newLineAtOffset(360, pagina.getMediaBox().getHeight()-pocicion);
+                            contenido.showText("• 2 Persona Extra ($300)");
+                            contenido.endText();
+                            pocicion+=20;
+                            break;
+                        }
+                        case 2:{
+                            contenido.beginText();
+                            contenido.setFont(PDType1Font.COURIER, 11);
+                            contenido.newLineAtOffset(360, pagina.getMediaBox().getHeight()-pocicion);
+                            contenido.showText("• 2 Persona Extra ($400)");
+                            contenido.endText();
+                            pocicion+=20;
+                            break;
+                        }
+                        case 3:{
+                            contenido.beginText();
+                            contenido.setFont(PDType1Font.COURIER, 11);
+                            contenido.newLineAtOffset(360, pagina.getMediaBox().getHeight()-pocicion);
+                            contenido.showText("• 2 Persona Extra ($500)");
+                            contenido.endText();
+                            pocicion+=20;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(this.jCheckBox1.isSelected()==true){
+                contenido.beginText();
+                contenido.setFont(PDType1Font.COURIER, 11);
+                contenido.newLineAtOffset(350, pagina.getMediaBox().getHeight()-pocicion);
+                contenido.showText("• Servicio al cuarto.$250");
+                contenido.endText();
+                pocicion+=15;
+            }
+            if(this.jCheckBox2.isSelected()){
+                contenido.beginText();
+                contenido.setFont(PDType1Font.COURIER, 11);
+                contenido.newLineAtOffset(350, pagina.getMediaBox().getHeight()-pocicion);
+                contenido.showText("• Servicio de bar.-$670");
+                contenido.endText();
+                pocicion+=15;
+            }
+            if(this.jCheckBox3.isSelected()){
+                contenido.beginText();
+                contenido.setFont(PDType1Font.COURIER, 11);
+                contenido.newLineAtOffset(350, pagina.getMediaBox().getHeight()-pocicion);
+                contenido.showText("• Servicio tintorería.-$130");
+                contenido.endText();
+                pocicion+=15;
+            }
+            if(this.jCheckBox4.isSelected()){
+                contenido.beginText();
+                contenido.setFont(PDType1Font.COURIER, 11);
+                contenido.newLineAtOffset(350, pagina.getMediaBox().getHeight()-pocicion);
+                contenido.showText("• Servicio SPA.-$1,500");
+                contenido.endText();
+                pocicion+=15;
+            }
+            if(this.jCheckBox5.isSelected()){
+                contenido.beginText();
+                contenido.setFont(PDType1Font.COURIER, 11);
+                contenido.newLineAtOffset(350, pagina.getMediaBox().getHeight()-pocicion);
+                contenido.showText("• Servicion de niñera.-$240");
+                contenido.endText();
+                pocicion+=15;
+            }
+            if(this.jCheckBox6.isSelected()){
+                contenido.beginText();
+                contenido.setFont(PDType1Font.COURIER, 11);
+                contenido.newLineAtOffset(350, pagina.getMediaBox().getHeight()-pocicion);
+                contenido.showText("• Servicion de transporte.-$300");
+                contenido.endText();
+                pocicion+=15;
+            }
+            else{
+                if(persona.getTotalPersonas() <= N){
+                    contenido.beginText();
+                    contenido.setFont(PDType1Font.COURIER, 11);
+                    contenido.newLineAtOffset(350, pagina.getMediaBox().getHeight()-pocicion);
+                    contenido.showText("No hay cargos extra...");
+                    contenido.endText();
+                }
+            }
+            if(CargoEx>0){
+                contenido.beginText();
+                contenido.setFont(PDType1Font.COURIER, 11);
+                contenido.newLineAtOffset(360, pagina.getMediaBox().getHeight()-pocicion);
+                contenido.showText("_________________________");
+                contenido.endText();
+                
+                contenido.beginText();
+                contenido.setFont(PDType1Font.COURIER, 11);
+                contenido.newLineAtOffset(360, pagina.getMediaBox().getHeight()-pocicion-20);
+                contenido.showText("Total Cargos extras: $"+CargoEx);
+                contenido.endText();
+            }
+            
+            for (int i = 1; i < 12; i++) {
+                contenido.beginText();
+                contenido.setFont(PDType1Font.COURIER, 11);
+                contenido.newLineAtOffset(340, pagina.getMediaBox().getHeight()-620+(i*11));
+                contenido.showText("|");
+                contenido.endText();
+            }
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER_BOLD, 14);
+            contenido.newLineAtOffset(250, pagina.getMediaBox().getHeight()-680);
+            contenido.showText("Salida completada.");
+            contenido.endText();
+            
+            switch(this.jLabelUsuario.getText()){
+                case "Carlos":{
+                    PDImageXObject Firma = PDImageXObject.createFromFile("src/imagenes/PDF/FirmaC.png", documento);
+            
+                    contenido.drawImage(Firma,75, pagina.getMediaBox().getHeight()-780,190,120);
+                    contenido.beginText();
+                    contenido.setFont(PDType1Font.COURIER, 11);
+                    contenido.newLineAtOffset(100, pagina.getMediaBox().getHeight()-760);
+                    contenido.showText("Carlos Luevano Santillan.");
+                    contenido.endText();
+                    break;
+                }
+                case "Samael":{
+                    PDImageXObject Firma = PDImageXObject.createFromFile("src/imagenes/PDF/FirmaS.png", documento);
+            
+                    contenido.drawImage(Firma,100, pagina.getMediaBox().getHeight()-780,190,120);
+                    contenido.beginText();
+                    contenido.setFont(PDType1Font.COURIER, 11);
+                    contenido.newLineAtOffset(100, pagina.getMediaBox().getHeight()-760);
+                    contenido.showText("Francisco Samael Martinez Contreras.");
+                    contenido.endText();
+                    break;
+                }
+            }
+            
+            
+            contenido.close();
+            
+            documento.save(Escritorio.replace("/", "\\").replace("\\", "\\\\")+"\\"+persona.getNombre()+".pdf");
+            JOptionPane.showMessageDialog(this, "PDF generado en el escritorio");
+        }catch(Exception x){
+            JOptionPane.showMessageDialog(this, "Problemas en el documento");
+        }
+        abrirarchivo(Escritorio.replace("/", "\\").replace("\\", "\\\\")+"\\"+persona.getNombre()+".pdf");
+    }
+
+    private void Desocupar() { // Despues de la salida del huesped si elimina de la base de datos.
+        String query = "DELETE FROM `huespedes` WHERE `huespedes`.`Nombre` = '"+ persona.getNombre() +"';";
+        this.conn.Update(query);
+    }
+    
+    public void abrirarchivo(String archivo){ // Solo habre el archivo .pdf ya generado.
+        try {
+           File objetofile = new File (archivo);
+           Desktop.getDesktop().open(objetofile);
+        }catch (IOException ex) {
+           System.out.println(ex);
+        }
+    }  
+    
+}
+
