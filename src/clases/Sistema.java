@@ -1163,7 +1163,7 @@ public class Sistema extends javax.swing.JFrame {
     private void jLabelSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelSalirMouseClicked
         System.exit(1);
     }//GEN-LAST:event_jLabelSalirMouseClicked
-
+                                                                                                                        // Punto 7, 12
     private void jLabelRegistroMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRegistroMouseReleased
         if (Activos() < 30) {
             this.jLabelSalida.setBackground(new java.awt.Color(20, 45, 87));
@@ -1207,12 +1207,12 @@ public class Sistema extends javax.swing.JFrame {
         this.jPanelSalida.setVisible(false);
         this.jPanelConsulta.setVisible(true);
     }//GEN-LAST:event_jLabelConsultaMouseReleased
-
+                                                                                                                        // Punto 7
     private void jComboBoxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoActionPerformed
-        Ocultar(this.jComboBoxTipo.getSelectedIndex());
+        Ocultar(this.jComboBoxTipo.getSelectedIndex());                         
         this.jLabelTotalPersonaExtras.setVisible(false);
     }//GEN-LAST:event_jComboBoxTipoActionPerformed
-
+                                                                                                                        // Punto 5, 9, 12
     private void jButtonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarActionPerformed
         if (Activos() < 30) {
             String caracter = "" + this.jComboBoxTipo.getSelectedItem();
@@ -1223,6 +1223,7 @@ public class Sistema extends javax.swing.JFrame {
                     && Integer.parseInt(this.jSpinnerTotalPersonas.getValue() + "") != 0
                     && Integer.parseInt(this.jSpinnerDiasA.getValue() + "") != 0
                     && this.jDateChooserFecha.getDate() != null) {
+                
                 SimpleDateFormat Formato = new SimpleDateFormat("YYYY-MM-dd");
                 persona = new Huesped(this.jTextFieldNombre.getText(), caracter.charAt(0), numero = Seleccionado(), this.jTextFieldCiudad.getText(), Integer.parseInt(this.jSpinnerTotalPersonas.getValue() + ""), Integer.parseInt(this.jSpinnerDiasA.getValue() + ""), this.jDateChooserFecha.getDate(), true);
                 System.out.println(persona.toString());
@@ -1232,7 +1233,7 @@ public class Sistema extends javax.swing.JFrame {
 
                 int j = this.conn.Update(query);
                 if (j == 1) {
-                    Voucher Tiquet = new Voucher(persona);
+                    Voucher Tiquet = new Voucher(persona);                                                                      // Punto 9
                     Tiquet.setVisible(true);
                     Limpiar();
                     Activos();
@@ -1243,7 +1244,7 @@ public class Sistema extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "No a acabado de completar los parametros de registro.");
             }
-            if (Activos() >= 30) {
+            if (Activos() >= 30) {                                                                                              // Punto 12
                 JOptionPane.showMessageDialog(this, "La ultima habitacion se a ocupado y el registro fue exitoso\nEl Hotel esta lleno.");
                 this.jPanelHome.setVisible(true);
                 this.jPanelRegistro.setVisible(false);
@@ -1252,7 +1253,7 @@ public class Sistema extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "El Hotel esta lleno.");
         }
     }//GEN-LAST:event_jButtonRegistrarActionPerformed
-
+                                                                                                                        // Punto 8
     private void jSpinnerTotalPersonasStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerTotalPersonasStateChanged
         switch (this.jComboBoxTipo.getSelectedIndex()) { // Al agregar mas persona de lo que es la habitacion, aparece un mensaje de cargo extra.
             case -1: {
@@ -1778,7 +1779,7 @@ public class Sistema extends javax.swing.JFrame {
                 break;
             }
         }
-    }
+    }                                                                       // Punto 7
 
     private int Seleccionado() { // Solo sirve para saber si uno de los RadioButton esta seleccionado o no.
         int i = 1;
@@ -1926,7 +1927,7 @@ public class Sistema extends javax.swing.JFrame {
         }
         Conteo(cont, S, D, T);
         return cont;
-    }
+    }                                                                                // Punto 7
 
     private void Conteo(int cont, int S, int D, int T) { // es parte del metodo Activos y solo escribe las habitaciones que estan libres en los JLabels.
         this.jLabelTotalHL.setText("Total de Habitaciones Libres: " + (30 - cont));
@@ -2118,7 +2119,7 @@ public class Sistema extends javax.swing.JFrame {
                 break;
             }
         }
-    }
+    }                                                                        // Punto 7
 
     //----------------------  Metodos para Salidas -------------------------------
     private void Buscar(int indice) {  // Mostramos y Activamos si se encuentra alguien en la habitacion que se le manda.
@@ -2594,6 +2595,12 @@ public class Sistema extends javax.swing.JFrame {
             contenido.setFont(PDType1Font.COURIER_BOLD, 14);
             contenido.newLineAtOffset(250, pagina.getMediaBox().getHeight()-680);
             contenido.showText("Salida completada.");
+            contenido.endText();
+            
+            contenido.beginText();
+            contenido.setFont(PDType1Font.COURIER_BOLD, 14);
+            contenido.newLineAtOffset(230, pagina.getMediaBox().getHeight()-695);
+            contenido.showText("Gracias por elegirnos, vuelva pronto.");
             contenido.endText();
             
             switch(this.jLabelUsuario.getText()){
